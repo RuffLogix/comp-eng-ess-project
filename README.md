@@ -1,6 +1,6 @@
 # 💻 Computer Engineering Essential Project
 
-This project is about ... (it's secret).
+This project is about creating an entertaining interactive web application for multi-user tasks.
 
 ## Tech stack 
 
