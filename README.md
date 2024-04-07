@@ -4,8 +4,8 @@ This project is about creating an entertaining interactive web application for m
 
 ## Tech stack 
 
-- Frontend: html, css, and vanilla.
-- Backend: express.js (I think).
+- Frontend: html, css, and vanilla js.
+- Backend: express.js.
 
 ## Members 
 
