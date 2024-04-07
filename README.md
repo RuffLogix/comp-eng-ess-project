@@ -10,3 +10,6 @@ This project is about creating an entertaining interactive web application for m
 ## Members 
 
 - [Teejuta Sriwaranon](https://github.com/rufflogix)
+- [Pakapim Eua-Anant](https://github.com/pakpim)
+- [Chatrin Yoonchalard]()
+- [Chayaphon Kultanon]()
