@@ -12,4 +12,4 @@ This project is about creating an entertaining interactive web application for m
 - [Teejuta Sriwaranon](https://github.com/rufflogix)
 - [Pakapim Eua-Anant](https://github.com/pakpim)
 - [Chatrin Yoonchalard](https://github.com/Mysterioucz)
-- [Chayaphon Kultanon]()
+- [Chayaphon Kultanon](ChayaphonKultanon)
