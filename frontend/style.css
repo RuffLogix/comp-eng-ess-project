@@ -1,0 +1,130 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.topBannerContainer{
+    position: relative;
+    width:100vw;
+    height:25vh;
+    z-index: 0;
+}
+.topBannerContainer #bg{
+    background-color: #FDC453;
+    width: 100vw;
+    height: 18.75vh;
+}
+.topBannerContainer p#name{
+    position: absolute;
+    width: 100%;
+    height: 85%;
+    top: 6.5vh;
+    z-index: 1;
+    font-family: "Kodchasan", sans-serif;
+    font-weight: 800;
+    font-size: 7.8vw; /* 13 em*/
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke: 0.025em;
+    -webkit-text-stroke-color: #6A472E;
+    text-align: center;
+}
+.main .btn,input[type="text"]{
+    font-family: "DM Mono", monospace;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 1.25vw; /*2em*/
+}
+p.ptext{
+    font-family: "Gloria Hallelujah", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.6vw;/*2.5em*/
+    color: #6A472E;
+    text-align: center;
+}
+input{
+    text-align: center;
+    border: none; /* Remove Default border */
+    border-style: none;
+}
+input#username{
+    width: 17.9vw;
+    height: 9.125vh;
+    border-color: #6A472E;
+    border-style: solid;
+    border-width: 0.2vw;
+    border-radius: 1.17vw ;
+    background-color: #FFE5A3;
+    -webkit-text-fill-color: #C59F67;
+}
+input::-webkit-input-placeholder{
+    opacity: 0.6;
+}
+.btn#createPed{
+    width: 17.9vw;
+    height: 9.125vh;
+    border-color: #6A472E;
+    border-style: solid;
+    border-width: 0.2vw;
+    border-radius: 1.17vw ;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 9.125vh;
+    -webkit-text-fill-color: #6A472E;
+    background-color: #96D3FF;
+}
+.party{
+    display: grid;
+    width: 17.9vw;
+    height: 18.45vh;
+    grid-template-rows: 9.125vh ,9.125vh;
+    border-color: #6A472E;
+    border-style: solid;
+    border-width: 0.2vw;
+    border-radius: 1.17vw ;
+
+    overflow: hidden; /* Crop the exceed bg color */
+}
+.btn#join{
+    width: 17.9vw;
+    height: 9.125vh;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 9.125vh;
+    -webkit-text-fill-color: #6A472E;
+    background-color: #96D3FF;
+    border-bottom:0.2vw solid #6A472E ;
+}
+input#joinId{
+    width: 17.9vw;
+    height: 9.125vh;
+    background-color: #CAECFA;
+    -webkit-text-fill-color: #8FBEC5;
+}
+.main{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,40%);
+    grid-template-rows: repeat(4,10vh);
+    margin-top: 5vh;
+    justify-content: center;
+    align-items:center ;
+}
+.user{
+    grid-area: 1/1/2/2;
+    justify-items: center;
+    align-items: center;
+    display: grid;
+}
+.custom{
+    grid-area: 3/1/4/2;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: repeat(2,10vh);
+}
+.btn#createPed{
+    grid-area: 1/1/1/1;
+}
+p#maybe{
+    grid-area: 2/1/2/1;
+}
