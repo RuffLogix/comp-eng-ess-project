@@ -40,6 +40,7 @@ p.ptext{
     font-size: 3vw;/*2.5em*/
     color: #6A472E;
     text-align: center;
+    animation: float 3s infinite ease-in-out;
 }
 input{
     text-align: center;
@@ -141,6 +142,7 @@ p#then{
     top: -70%;
     left: -10%;
     transform: rotate(-25deg);
+    animation: float2 3s infinite ease-in-out;
 }
 p#maybe{
     position: relative;
@@ -166,4 +168,14 @@ img.pedImg{
     background-color: #FDC453;
     position: fixed;
     bottom: 0%;
+}
+@keyframes float {
+    50%{
+        transform: translateY(10%) rotate(4deg);
+    }
+}
+@keyframes float2 {
+    50%{
+        transform: translateY(1%);
+    }
 }
