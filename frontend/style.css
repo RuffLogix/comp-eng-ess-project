@@ -11,7 +11,7 @@
 .topBannerContainer #bg{
     background-color: #FDC453;
     width: 100vw;
-    height: 18.75vh;
+    height: 65%; /* 18.75vh */
 }
 .topBannerContainer p#name{
     position: absolute;
@@ -54,9 +54,12 @@ input#username{
     border-width: 0.2vw;
     border-radius: 1.17vw ;
     background-color: #FFE5A3;
-    -webkit-text-fill-color: #C59F67;
+    color: #6A472E;
 }
-input::-webkit-input-placeholder{
+input#username::placeholder{
+    color: #C59F67;
+}
+input::placeholder{
     opacity: 0.6;
 }
 .btn#createPed{
@@ -98,33 +101,60 @@ input#joinId{
     width: 17.9vw;
     height: 9.125vh;
     background-color: #CAECFA;
-    -webkit-text-fill-color: #8FBEC5;
+    color: #6A472E;
+}
+input#joinId::placeholder{
+    color: #8FBEC5;
 }
 .main{
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit,40%);
+    grid-template-columns: repeat(2,20%);
     grid-template-rows: repeat(4,10vh);
     margin-top: 5vh;
     justify-content: center;
     align-items:center ;
 }
 .user{
-    grid-area: 1/1/2/2;
+    grid-area: 1/1/3/3;
     justify-items: center;
     align-items: center;
     display: grid;
 }
 .custom{
-    grid-area: 3/1/4/2;
+    grid-area: 3/1/5/3;
     display: grid;
     grid-template-columns: repeat(2,1fr);
     grid-template-rows: repeat(2,10vh);
+    justify-items: center;
+    align-content: center;
 }
 .btn#createPed{
     grid-area: 1/1/1/1;
 }
+p#then{
+    grid-area: 1/1/1/1;
+    position: relative;
+    justify-self: left;
+    top: -35%;
+    left: -5%;
+    transform: rotate(-25deg);
+}
 p#maybe{
+    position: relative;
     grid-area: 2/1/2/1;
+    left: 20%;
+    transform: rotate(10deg);
+}
+.pedChar{
+    position: absolute;
+    width: 1fr;
+    height: 1fr;
+    bottom: 10%;
+    left: 20%;
+}
+img.pedImg{
+    width: 15vw;
+    height: auto;
 }
