@@ -132,6 +132,10 @@ input#joinId::placeholder{
     justify-items: center;
     align-content: center;
 }
+button.btn {
+    border: none;
+    cursor: pointer;
+}
 .btn#createPed{
     grid-area: 1/1/1/1;
 }
