@@ -1,6 +1,7 @@
 *{
     margin: 0;
     padding: 0;
+    border: none;
 }
 .btn,.text{
     font-family: "DM Mono", monospace;
@@ -9,18 +10,35 @@
     -webkit-text-fill-color: #6A472E;
 }
 .btn#abandon{
+    width:fit-content ;
+    height: fit-content;
+    padding: 1.5vw;
     position: absolute;
+    background-color: #FFE5A3;
+    border: #6A472E solid 0.3vw;
+    border-radius: 1.75vw;
+    display: grid;
+    grid-template-columns: 3.5vw 1fr;
+    align-items: center;
+    top: 5%;
+    left: 2%;
+}
+.btn#abandon img{
+    width: 2.5vw;
+    height: auto;
+    justify-self: left;
 }
 .container{
     display: grid;
-    grid-template-columns: 12rem 1fr 12rem;
-    grid-template-rows: 8vh 1fr auto;
+    grid-template-columns: 10vw 1fr 10vw;
+    grid-template-rows: auto 1fr auto;
     min-height: 100vh;
+    /* max-height: 100vh; */
     /* max-width: 1024px; Default setting TODO wait for @media query to modify this property */
 }
 .banner{
     background-color: #FDC453;
-    padding: 4vh;
+    padding: 5vh;
 }
 .banner#header{
     grid-area: 1/1/1/4;
@@ -66,14 +84,18 @@ p#num{
 }
 .ready{
     height: fit-content;
-    margin-top: 10%;
+    position: relative;
+    top: 10vh;
+    /* margin-top: 10%; */
 }
 .pbox{
+    position: relative;
+    top:30%;
+    /* margin-top: 30%; */
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: auto 1fr;
     box-sizing: border-box;
-    margin-top: 30%;
     width: 80%;
     height: 15vw;
     background-color: #FFE5A3;
@@ -93,25 +115,41 @@ p.top{
 }
 .name{
     position: relative;
-    top: -10%;
+    top: -15%;
     box-sizing: border-box;
     width: fit-content;
-    height: fit-content;
-    padding: 10%;
-    padding-left: 15%;
-    padding-right: 15%;
+    height: 90%;
+    padding: 2vw;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
     background-color: #FDC453;
     border-radius: 1.5vw;
 }
+.btn#copy p.text{
+    font-size: 1.25vw;
+    align-self: center;
+    -webkit-text-fill-color: #C59F67;
+}
+.btn#copy img{
+    width: 2.5vw;
+    height: auto;
+    justify-self: right;
+}
 .btn#copy{ /* TODO complete the copy link button */
+    display: grid;
+    justify-self: center;
+    grid-template-columns: auto 3.5vw;
+    /* grid-gap: 2rem; */
+    align-items: center;
+    font-size: 1vw;
     position: relative;
-    /* top: -10%; */
+    top: -10%;
     box-sizing: border-box;
-    width: fit-content;
-    height: fit-content;
-    padding: 10%;
-    padding-left: 15%;
-    padding-right: 15%;
+    width: 90%;
+    height: 80%;
+    padding: 1vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
     background-color: #FDC453;
     border-radius: 1.5vw;
 }
@@ -119,8 +157,6 @@ p.top{
     position: relative;
     top: -30%;
 }
-
-
 
 .form-control {
     font-size: 2vw;
@@ -159,10 +195,6 @@ input[type="checkbox"]::before {
 input[type="checkbox"]:checked::before {
     transform: scale(1);
 }
-  
-
-
-
 .pedChar{
     display: flex;
     grid-area:pedChar;
@@ -171,17 +203,20 @@ input[type="checkbox"]:checked::before {
     text-align: center;
 }
 img#topPed{
-    width: 80%;
+    position: relative;
+    width: clamp(16vw,80%,18vw);
     height: auto;
+    align-self: center;
 }
 #water{
     position: absolute;
-    top: 54%; 
+    align-self: center;
+    /* top: 50%; 
     left: 50%; 
-    transform: translate(-50%, -54%);
+    transform: translate(-50%, -50%); */
     z-index: -1;
-    width: 23vw;
-    height: 23vw;
+    width: clamp(18vw,80%,22vw);
+    height: clamp(18vw,80%,22vw);
     background-color: #CAECFA;
     border-radius:100%;
     box-shadow: 0 0 0 3px none;
@@ -193,11 +228,20 @@ img#topPed{
     align-content: center;
 }
 button#start{
+    position: relative;
     width: 30%;
     height: 11vh;
     font-weight: 600;
     border: #6A472E solid 0.3vw;
     border-radius: 1.5vw;
     background-color: #FDC453;
-    margin-top: 1vh;
+    top: 15%;
+}
+@media (max-height:500px){
+    .ready{
+        top: 50%;
+    }
+    .banner{
+        padding: 2vh;
+    }
 }
