@@ -10,36 +10,51 @@
     <title>PunPed</title>
 </head>
 <body>
-    <div class="btn" id="abandon">h</div>
-    <div class="container"> <!--need to be Grid -->
-        <div class="banner" id="header"></div> <!--full streach -->
+    <div class="btn" id="abandon">abandon this ped</div>
+    <div class="container">
+        <div class="banner" id="header"></div> <!--full strech -->
         <main><!-- Display Grid -->
             <div id="partyId">
-                <p class="text">Your Ped’s ID:</p>
+                <p class="text" id="ped">Your Ped’s ID:</p>
                 <p class="text" id="num">XXXXXX</p>
             </div>
-            <div id="left">
-                <div class="pbox" id="self"></div>
+            <div class="player" id="player1">
+                <div class="pbox" id="self">
+                    <p class="text top" id="left">Left</p>
+                    <div class="name">
+                        <p class="text" id="myname">PlayerName</p>
+                    </div>
+                    <p class="text status">(Yes, you)</p>
+                </div>
                 <div class="ready">
-                    <p class="text">Ready ?</p>
-                    <input type="checkbox" id="checkBox">
+                    <label class="form-control text ">
+                        Ready?
+                        <input type="checkbox" name="checkbox" />
+                      </label>
                 </div>
             </div>
-            <div id="right">
-                <div class="pbox" id="other"></div>
+            <div class="player" id="player2">
+                <div class="pbox" id="other">
+                    <p class="text top" id="right">Right</p>
+                    <button class="btn" id="copy"></button>
+                    <p class="text status" id="playerstatus">(empty ;-;)</p>
+                </div>
                 <div class="ready">
-                    <p class="text">Ready ?</p>
-                    <input type="checkbox" id="checkBox">
+                    <label class="form-control text">
+                        Ready?
+                        <input type="checkbox" name="checkbox" />
+                      </label>
                 </div>
             </div>
             <div class="pedChar">
-                <img src="" alt="" id="topPed">
+                <img src="./source/img/pedChar.svg" alt="" id="topPed">
                 <div id="water"></div>
             </div>
+            <div class="wrapper">
+                <button class="btn" id="start"> Start!</button> 
+            </div>
         </main>
-        <button class="btn" id="start"> Start !</button>
-        <div class="banner" id="footer"></div><!--full streach -->
+        <div class="banner" id="footer"></div><!--full strech -->
     </div>
-
 </body>
 </html>

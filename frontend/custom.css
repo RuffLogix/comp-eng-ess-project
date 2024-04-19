@@ -2,3 +2,202 @@
     margin: 0;
     padding: 0;
 }
+.btn,.text{
+    font-family: "DM Mono", monospace;
+    font-weight: 450;
+    font-size: 2vw; /* 13 em*/
+    -webkit-text-fill-color: #6A472E;
+}
+.btn#abandon{
+    position: absolute;
+}
+.container{
+    display: grid;
+    grid-template-columns: 12rem 1fr 12rem;
+    grid-template-rows: 8vh 1fr auto;
+    min-height: 100vh;
+    /* max-width: 1024px; Default setting TODO wait for @media query to modify this property */
+}
+.banner{
+    background-color: #FDC453;
+    padding: 4vh;
+}
+.banner#header{
+    grid-area: 1/1/1/4;
+    /* padding: 2.5rem; */
+}
+.banner#footer{
+    grid-area: 4/1/4/4;
+}
+main{
+    grid-area: 2/2/3/3;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 16vh 1fr 16vh;/* 10rem 1fr 10rem*/
+    grid-template-areas: 
+    "partyId partyId partyId"
+    "player1 pedChar player2"
+    "startbtn startbtn startbtn";
+    align-content: center;
+    justify-content: center;
+}
+#partyId{
+    grid-area: partyId;
+    text-align: center;
+    align-content: center;
+}
+p#ped{
+    font-size: 2vw;/* 1.5rem */
+}
+p#num{
+    font-size: 3.5vw;/*2.5rem*/
+}
+#player1{
+    grid-area: player1;
+}
+#player2{
+    grid-area: player2;
+}
+.player{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto 1fr;
+    justify-items: center;
+}
+.ready{
+    height: fit-content;
+    margin-top: 10%;
+}
+.pbox{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto 1fr;
+    box-sizing: border-box;
+    margin-top: 30%;
+    width: 80%;
+    height: 15vw;
+    background-color: #FFE5A3;
+    padding: 1vw;
+    justify-items: center;
+    text-align: center;
+    border: #6A472E solid 0.3vw;
+    border-radius: 1.5vw;
+}
+p.top{
+    position: relative;
+    top: -100%;
+    background: rgb(255,255,255);
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 50%, #FFE5A3 50%,#FFE5A3  100%);
+    padding-right: 5%;
+    padding-left: 5%;
+}
+.name{
+    position: relative;
+    top: -10%;
+    box-sizing: border-box;
+    width: fit-content;
+    height: fit-content;
+    padding: 10%;
+    padding-left: 15%;
+    padding-right: 15%;
+    background-color: #FDC453;
+    border-radius: 1.5vw;
+}
+.btn#copy{ /* TODO complete the copy link button */
+    position: relative;
+    /* top: -10%; */
+    box-sizing: border-box;
+    width: fit-content;
+    height: fit-content;
+    padding: 10%;
+    padding-left: 15%;
+    padding-right: 15%;
+    background-color: #FDC453;
+    border-radius: 1.5vw;
+}
+.pbox .status{
+    position: relative;
+    top: -30%;
+}
+
+
+
+.form-control {
+    font-size: 2vw;
+    /* font-weight: bold; */
+    line-height: 1.1;
+    display: grid;
+    grid-template-columns: auto 1em;
+    gap: 0.5em;
+}
+input[type="checkbox"] {
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid #6A472E;
+    border-radius: 0.15em;
+    display: grid;
+    place-content: center;
+}
+.form-control + .form-control {
+    margin-top: 1em;
+}
+input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    background-color: #6A472E;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+  
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+  
+
+
+
+.pedChar{
+    display: flex;
+    grid-area:pedChar;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+}
+img#topPed{
+    width: 80%;
+    height: auto;
+}
+#water{
+    position: absolute;
+    top: 54%; 
+    left: 50%; 
+    transform: translate(-50%, -54%);
+    z-index: -1;
+    width: 23vw;
+    height: 23vw;
+    background-color: #CAECFA;
+    border-radius:100%;
+    box-shadow: 0 0 0 3px none;
+}
+.wrapper{
+    display: flex;
+    grid-area: startbtn;
+    justify-content: center;
+    align-content: center;
+}
+button#start{
+    width: 30%;
+    height: 11vh;
+    font-weight: 600;
+    border: #6A472E solid 0.3vw;
+    border-radius: 1.5vw;
+    background-color: #FDC453;
+    margin-top: 1vh;
+}
