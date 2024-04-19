@@ -12,7 +12,6 @@ const config = {
 
 let game = new Phaser.Game(config);
 
-
 function preload() {
     this.load.image('ped', 'source/img/Ped.svg');
     this.load.image('ped-top-view', 'source/img/ped-top-view.PNG');
