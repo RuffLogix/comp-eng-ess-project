@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./game.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Gloria+Hallelujah&family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <title>PunPed</title>
+</head>
+<body>
+    <div class="scoreboardContainer">
+        <h2 id="scoreboard-header">Scoreboard</h2>
+        <ol id="scoreboard">
+            <li>PlayerName1<br>PlayerName1</li>
+            <li>PlayerName2<br>PlayerName2</li>
+            <li>PlayerName3<br>PlayerName3</li>
+        </ol>
+    </div>
+    <div class="bottomPart">
+        <div class="levelBar">
+            <p id="level">Level: xx</p>
+            <p id="distance">000/999 km</p>
+            <div id="distance-bar">
+                <div id="done-distance"></div>
+                <div id="remain-distance"></div>
+            </div>    
+        </div>
+        <div class="skill">
+            <h2 id="skill-point">Skill Points: xx</h2>
+            <div class="skill-row">
+                <p class="skillText" id="speed">Speed</p>
+                <div class="skill-bar" id="speed-bar">
+                    <div class="done" ></div>
+                    <div class="remain"></div>
+                </div> 
+                <button class="plus-button">+</button>
+            </div>
+            <div class="skill-row">
+                <p class="skillText" id="Atk">Atk </p>
+                <div class="skill-bar" id="Atk-bar">
+                    <div class="done" ></div>
+                    <div class="remain"></div>
+                </div> 
+                <button class="plus-button">+</button>
+            </div>
+            <div class="skill-row">
+                <p class="skillText" id="Hp">Hp </p>
+                <div class="skill-bar" id="Hp-bar">
+                    <div class="done" ></div>
+                    <div class="remain"></div>
+                </div> 
+                <button class="plus-button">+</button>
+            </div>
+        </div>
+    </div>
+    <script src="./game.js"></script>
+</body>
+</html>
