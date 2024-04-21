@@ -1,3 +1,4 @@
+//TODO implement duck healthbar & player name & smoother movement
 class Duck {
     constructor() {
         this.x = 0;
@@ -25,8 +26,8 @@ class Duck {
         }
     }
 
-    setHp(hp){
-        this.Hp = Math.min(this.MaxHp,Math.max(0,hp));
+    setHp(hp) {
+        this.hp = Math.min(this.MAXHP, Math.max(0, hp)); // Fix typo here
         return this;
     }
 
@@ -50,7 +51,7 @@ class Duck {
                 this.dmg += 10;
                 break;
             case "hp":
-                this.setHp(this.Hp + 50);
+                this.setHp(this.hp + 50);
                 break;
             default:
                 break;
@@ -71,7 +72,7 @@ class Camera {
     }
 }
 
-let duck = (new Duck()).setX(100).setY(100);
+let duck = new Duck().setX(100).setY(100); // Simplified instantiation
 let camera = new Camera();
 let dots = [];
 let timer = 0;
@@ -98,21 +99,58 @@ function generateRandomDots(numDots) {
     }
 }
 
+function updateDuckPosition() {
+    let currentTime = performance.now();
+    let deltaTime = (currentTime - lastUpdateTime) / 1000; // Convert milliseconds to seconds
+
+    // Update duck's position using interpolation
+    duck.x += duck.speed * Math.cos(duck.direction) * deltaTime;
+    duck.y += duck.speed * Math.sin(duck.direction) * deltaTime;
+    duck.distance += (duck.speed / 10) * deltaTime;
+    lastUpdateTime = currentTime; // Update last update time
+}
+
+let lastUpdateTime = performance.now(); // Track the time of the last update
+
+function turnDuck(isLeft) {
+    duck.direction += (isLeft ? -3 : 3) * 1 / 60.0;
+    updateDuckPosition();
+    camera.update(duck);
+    render();
+}
+
+function updateUI() {
+    let level = document.getElementById("level");
+    let distance = document.getElementById("distance");
+    let skillPoint = document.getElementById("skill-point");
+
+    let remainDistance = document.getElementById("remain-distance");
+    let doneDistance = document.getElementById("done-distance");
+
+    remainDistance.style.width = `${Math.max(10, 100 - (duck.distance / duck.MAXEXP) * 100)}%`;
+    doneDistance.style.width = `${(duck.distance / duck.MAXEXP) * 100}%`;
+    console.log(`${(duck.distance / duck.MAXEXP) * 100}%`);
+    level.innerHTML = `Level: ${duck.level}`;
+    distance.innerHTML = `${Math.round(duck.distance, 2)}/${duck.MAXEXP} m`;
+    skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;
+}
+
 function render() {
     let canvas = document.getElementById("canvas");
     let ctx = canvas.getContext("2d");
-    let image = new Image();
-    image.src = "./source/img/ped-top-view.PNG";
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#FF0000";
     
     dots.forEach(dot => {
-        ctx.beginPath()
+        ctx.beginPath();
         ctx.arc(dot.x - camera.x + canvas.width / 2, dot.y - camera.y + canvas.height / 2, dot.radius, 0, Math.PI * 2, false);
         ctx.fillStyle = "#FF0000";
         ctx.fill();
     });
+
+    let image = new Image();
+    image.src = "./source/img/ped-top-view.PNG";
 
     image.onload = () => {
         ctx.save();
@@ -126,41 +164,21 @@ function render() {
     duck.levelUp();
 }
 
-function updateDuctPosition() {
-    duck.x += duck.speed * Math.cos(duck.direction) * 1/60.0;
-    duck.y += duck.speed * Math.sin(duck.direction) * 1/60.0;
-    duck.distance += (duck.speed / 10) * 1/60.0;
-    render();
-}
-
-function turnDuck(isLeft) {
-    duck.direction += (isLeft ? -3 : 3) * 1/60.0;
-    updateDuctPosition();
-    camera.update(duck);
-    render();
-}
-
-function updateUI() {
-    let level = document.getElementById("level");
-    let distance = document.getElementById("distance");
-    let skillPoint = document.getElementById("skill-point");
-
-    level.innerHTML = `Level: ${duck.level}`;
-    distance.innerHTML = `${Math.round(duck.distance, 2)}/${duck.MAXEXP} m`;
-    skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;
-}
-
+// Initialize the animation when the page loads
 addEventListener("load", () => {
     init();
     render();
 });
 
+// Event listener for keypress events
 addEventListener("keypress", (e) => {
     switch (e.key) {
-        case "q" || "Q":
+        case "q":
+        case "Q":
             turnDuck(true);
             break;
-        case "e" || "E":
+        case "e":
+        case "E":
             turnDuck(false);
             break;
         default:
@@ -169,12 +187,8 @@ addEventListener("keypress", (e) => {
     timer += 2/60.0;
 });
 
-addEventListener("keyup", () => {
-    console.log("Timer: " + timer);
-    timer = 0;
-});
-
+// Event listener for window resize
 addEventListener("resize", () => {
     init();
     render();
-})
+});
