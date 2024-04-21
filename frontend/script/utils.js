@@ -5,6 +5,41 @@ class Duck {
         this.speed = 1000;
         this.direction = 0;
         this.size = 250;
+
+        this.level = 1;
+        this.maxExp = 100;
+        this.exp = 0;
+
+        this.MaxHp = 100;
+        this.Hp = 100;
+        this.Speed = 1000;
+        this.Dmg = 20;
+    }
+
+    ///////////////////////////////////////////
+
+    UpHp(){
+        this.MaxHp = this.MaxHp +10;
+    }
+
+    UpSpeed(){
+        this.Speed = this.Speed + 500;
+    }
+
+    UpAtk(){
+        this.Dmg = this.Dmg + 5;
+    }
+
+    LevelUp(){
+        this.exp = 0;
+        this.maxExp = this.maxExp + 50;
+        this.level++;
+    }
+
+    /////////////////////////////////////////////
+
+    setHp(hp){
+        this.Hp = Math.min(this.MaxHp,Math.max(0,hp));
     }
 
     setX(x) {
