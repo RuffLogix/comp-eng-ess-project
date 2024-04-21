@@ -109,6 +109,7 @@ function updateDuckPosition() {
     duck.y += duck.speed * Math.sin(duck.direction) * deltaTime;
     duck.distance += (duck.speed / 10) * deltaTime;
     lastUpdateTime = currentTime; // Update last update time
+
 }
 
 let lastUpdateTime = performance.now(); // Track the time of the last update
@@ -127,10 +128,17 @@ function updateUI() {
 
     let remainDistance = document.getElementById("remain-distance");
     let doneDistance = document.getElementById("done-distance");
-
-    remainDistance.style.width = `${Math.max(10, 100 - (duck.distance / duck.MAXEXP) * 100)}%`;
+    remainDistance.style.width = `${Math.max(0, 100 - (duck.distance / duck.MAXEXP) * 100)}%`;
     doneDistance.style.width = `${(duck.distance / duck.MAXEXP) * 100}%`;
-    console.log(`${(duck.distance / duck.MAXEXP) * 100}%`);
+    let doneDistanceWidth = parseInt(doneDistance.style.width.replace("%",""));
+    console.log(doneDistanceWidth)
+    if(doneDistanceWidth >= 100){
+        doneDistance.classList.add("fully-done-distance");
+        remainDistance.style.opacity = "0";
+    }else{
+        doneDistance.classList.remove("fully-done-distance");
+        remainDistance.style.opacity = "1";
+    }
     level.innerHTML = `Level: ${duck.level}`;
     distance.innerHTML = `${Math.round(duck.distance, 2)}/${duck.MAXEXP} m`;
     skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;

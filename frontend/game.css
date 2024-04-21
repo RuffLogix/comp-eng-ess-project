@@ -99,6 +99,10 @@ li{
     border-bottom-width: 0.17rem;
     border-left-width: 0.17rem;
 }
+.fully-done-distance{
+    border-radius: 1.5rem !important;
+    border-width: 0.17rem !important;
+}
 
 #remain-distance {
     background-color: #FFE5A3;
