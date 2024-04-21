@@ -184,3 +184,7 @@ li{
     text-align: center;
     align-content: center;
 }
+
+.plus-button:hover {
+    background-color: #e4bb69;
+}
