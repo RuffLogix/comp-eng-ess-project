@@ -1,5 +1,10 @@
+export const getDucks = async (req, res) => {
+    res.send("Get Ducks");
+};
+
 export const getDuck = async (req, res) => {
-    res.send("Get Duck");
+    const { id } = req.params;
+    res.send(`Get Duck: ${id}`);
 };
 
 export const updateDuck = async (req, res) => {

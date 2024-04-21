@@ -1,15 +1,44 @@
+import { generateRoomId } from "../services/generateRoom.js";
+
+const rooms = {};
+
 export const getRoom = async (req, res) => {
-    res.send("Get Room");
+    res.json(rooms);
 };
 
 export const createRoom = async (req, res) => {
-    res.send("Create Room");
+    const { username } = req.body;
+    const roomId = generateRoomId(16);
+
+    rooms[roomId] = {
+        players: [username],
+    }
+
+    res.json({
+        roomId,
+        status: "success",
+    });
 };
 
 export const joinRoom = async (req, res) => {
-    res.send("Join Room");
+    const { username, roomId } = req.body;
+    let status = "success";
+
+    if (!rooms[roomId] || rooms[roomId].players.length >= 2) {
+        status = "error";
+    } else {
+        rooms[roomId].players.push(username);
+    }
+
+    res.json({ roomId, status });
 };
 
 export const deleteRoom = async (req, res) => {
-    res.send("Delete Room");
+    const { roomId } = req.body;
+    delete rooms[roomId];
+
+    res.json({
+        roomId,
+        status: "success",
+    });
 };
