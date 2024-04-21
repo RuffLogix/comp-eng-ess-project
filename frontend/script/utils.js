@@ -118,9 +118,26 @@ let turningDirection = 0; // Variable to store the turning direction
 function turnDuck(isLeft) {
     turningDirection = isLeft ? -duck.turnspeed : duck.turnspeed;
 }
-
+let turningSpeed = 0.5;
+let interval = 0;
+var acceleration = 0.5;
+var deceleraion = false;
+const MAX_TURNING_SPEED = 3;
 function updateDuckDirection() {
-    duck.direction += turningDirection * 3 * Math.PI / 180; // Adjust turning speed as needed
+    console.log(interval);
+    if(!deceleraion){
+        turningSpeed = Math.min(MAX_TURNING_SPEED,turningSpeed + acceleration*interval)
+        duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
+    }else if(turningSpeed != 0){
+        turningSpeed = Math.max(0,turningSpeed - 0.25*acceleration*interval)
+        duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
+    }else{
+        deceleraion = false;
+        turningSpeed = 0; //reset turningSpeedq
+        turningDirection = 0; //reset turning Direction
+        interval = 0; //reset interval
+    }
+    
 }
 
 function updateUI() {
@@ -132,9 +149,9 @@ function updateUI() {
     let doneDistance = document.getElementById("done-distance");
     remainDistance.style.width = `${Math.max(0, 100 - (duck.distance / duck.MAXEXP) * 100)}%`;
     doneDistance.style.width = `${(duck.distance / duck.MAXEXP) * 100}%`;
+    //update Distance bar
     let doneDistanceWidth = parseInt(doneDistance.style.width.replace("%",""));
-    console.log(doneDistanceWidth)
-    if(doneDistanceWidth >= 100){
+    if(doneDistanceWidth >= 99.25){
         doneDistance.classList.add("fully-done-distance");
         remainDistance.style.opacity = "0";
     }else{
@@ -187,9 +204,9 @@ function gameLoop() {
 addEventListener("load", () => {
     init(); // Initialize the game
 });
-
 // Event listener for keydown events
 addEventListener("keydown", (e) => {
+    interval = Math.min(0.8,(interval+0.01));
     switch (e.key) {
         case "q":
         case "Q":
@@ -204,6 +221,6 @@ addEventListener("keydown", (e) => {
     }
 });
 addEventListener("keyup", (e) => {
-    turningDirection = 0 // reset turningDirection when no key is pressed
+    deceleraion = true; // reset turningDirection when no key is pressed
 });
 
