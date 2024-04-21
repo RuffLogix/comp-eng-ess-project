@@ -3,6 +3,7 @@ class Duck {
         this.x = 0;
         this.y = 0;
         this.speed = 500;
+        this.turnspeed = 0.5
         this.direction = 0;
         this.size = 250;
 
@@ -112,11 +113,14 @@ function updateDuckPosition() {
 
 let lastUpdateTime = performance.now(); // Track the time of the last update
 
+let turningDirection = 0; // Variable to store the turning direction
+
 function turnDuck(isLeft) {
-    duck.direction += (isLeft ? -3 : 3) * 1 / 60.0;
-    updateDuckPosition();
-    camera.update(duck);
-    render();
+    turningDirection = isLeft ? -duck.turnspeed : duck.turnspeed;
+}
+
+function updateDuckDirection() {
+    duck.direction += turningDirection * 3 * Math.PI / 180; // Adjust turning speed as needed
 }
 
 function updateUI() {
@@ -141,7 +145,13 @@ function updateUI() {
     distance.innerHTML = `${Math.round(duck.distance, 2)}/${duck.MAXEXP} m`;
     skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;
 }
-
+//Preload Duck Image
+const image = new Image();
+image.src = "./source/img/ped-top-view.PNG";
+image.onload = () => {
+    // Start the game loop only after the image is loaded
+    gameLoop();
+};
 function render() {
     let canvas = document.getElementById("canvas");
     let ctx = canvas.getContext("2d");
@@ -155,18 +165,11 @@ function render() {
         ctx.fillStyle = "#FF0000";
         ctx.fill();
     });
-
-    let image = new Image();
-    image.src = "./source/img/ped-top-view.PNG";
-
-    image.onload = () => {
-        ctx.save();
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate(duck.direction + Math.PI / 2);
-        ctx.drawImage(image, -duck.size / 2, -duck.size / 2, duck.size, duck.size);
-        ctx.restore();
-    }
-
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(duck.direction + Math.PI / 2);
+    ctx.drawImage(image, -duck.size / 2, -duck.size / 2, duck.size, duck.size);
+    ctx.restore();
     updateUI();
     duck.levelUp();
 }
@@ -174,17 +177,15 @@ function render() {
 function gameLoop() {
     setTimeout(() => {
         updateDuckPosition(); // Update duck's position
+        updateDuckDirection(); // Update duck's direction
         render(); // Render the game
-
         // Request the next frame of the game loop
         requestAnimationFrame(gameLoop);
-    },10); // 100 milliseconds delay (0.1 second)
+    }); // 100 milliseconds delay (0.1 second)
 }
-
 // Initialize the animation and start the game loop when the page loads
 addEventListener("load", () => {
     init(); // Initialize the game
-    gameLoop(); // Start the game loop
 });
 
 // Event listener for keydown events
@@ -202,3 +203,7 @@ addEventListener("keydown", (e) => {
             break;
     }
 });
+addEventListener("keyup", (e) => {
+    turningDirection = 0 // reset turningDirection when no key is pressed
+});
+
