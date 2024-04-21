@@ -1,9 +1,8 @@
-//TODO implement duck healthbar & player name & smoother movement
 class Duck {
     constructor() {
         this.x = 0;
         this.y = 0;
-        this.speed = 1000;
+        this.speed = 500;
         this.direction = 0;
         this.size = 250;
 
@@ -59,7 +58,7 @@ class Duck {
         }
         this.skillpoint--;
     }
-};
+}
 
 class Camera {
     constructor() {
@@ -76,7 +75,6 @@ class Camera {
 let duck = new Duck().setX(100).setY(100); // Simplified instantiation
 let camera = new Camera();
 let dots = [];
-let timer = 0;
 
 function init() {
     let canvas = document.getElementById("canvas");
@@ -109,6 +107,7 @@ function updateDuckPosition() {
     duck.y += duck.speed * Math.sin(duck.direction) * deltaTime;
     duck.distance += (duck.speed / 10) * deltaTime;
     lastUpdateTime = currentTime; // Update last update time
+    camera.update(duck);
 }
 
 let lastUpdateTime = performance.now(); // Track the time of the last update
@@ -165,14 +164,24 @@ function render() {
     duck.levelUp();
 }
 
-// Initialize the animation when the page loads
+function gameLoop() {
+    setTimeout(() => {
+        updateDuckPosition(); // Update duck's position
+        render(); // Render the game
+
+        // Request the next frame of the game loop
+        requestAnimationFrame(gameLoop);
+    },10); // 100 milliseconds delay (0.1 second)
+}
+
+// Initialize the animation and start the game loop when the page loads
 addEventListener("load", () => {
-    init();
-    render();
+    init(); // Initialize the game
+    gameLoop(); // Start the game loop
 });
 
-// Event listener for keypress events
-addEventListener("keypress", (e) => {
+// Event listener for keydown events
+addEventListener("keydown", (e) => {
     switch (e.key) {
         case "q":
         case "Q":
@@ -185,11 +194,4 @@ addEventListener("keypress", (e) => {
         default:
             break;
     }
-    timer += 2/60.0;
-});
-
-// Event listener for window resize
-addEventListener("resize", () => {
-    init();
-    render();
 });
