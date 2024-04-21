@@ -6,6 +6,8 @@ document.querySelector("#start").addEventListener("click",() => {
     if(checkboxes[0].checked && checkboxes[1].checked){
         //Enter the game idk what to do
         console.log("Entering the game...");
+        //Could not using this
+        window.location.href = window.location.origin + "/frontend/game.html";
     }else{
         alert("Players are not ready");
     }
