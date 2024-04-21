@@ -22,6 +22,7 @@ class Duck {
             this.level++;
             this.skillpoint++;
             this.distance = 0;
+            this.MAXEXP = this.MAXEXP + 50;
         }
     }
 
