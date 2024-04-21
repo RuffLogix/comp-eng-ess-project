@@ -248,3 +248,7 @@ button#start{
         padding: 2vh;
     }
 }
+
+.name {
+    width: 90%;
+}
