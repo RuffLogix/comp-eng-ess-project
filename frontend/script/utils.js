@@ -11,7 +11,7 @@ class Duck {
         this.size = 250;
 
         this.level = 1;
-        this.MAXEXP = 1000;
+        this.MAXEXP = 10000;
         this.distance = 0;
         this.skillpoint = 0;
         this.status = true;
@@ -62,7 +62,7 @@ class Duck {
         switch (type) {
             case "speed":
                 this.maxSpeed += 100;
-                this.acceleration += 50;
+                this.acceleration += 25;
                 break;
             case "dmg":
                 this.dmg += 10;
@@ -141,16 +141,15 @@ function turnDuck(isLeft) {
 }
 let turningSpeed = 0.5;
 let interval = 0;
-var acceleration = 0.5;
+var Rotate_acc = 0.5;
 var deceleraion = false;
-const MAX_TURNING_SPEED = 3;
+const MAX_TURNING_SPEED = 2;
 function updateDuckDirection() {
-    console.log(interval);
     if(!deceleraion){
-        turningSpeed = Math.min(MAX_TURNING_SPEED,turningSpeed + acceleration*interval)
+        turningSpeed = Math.min(MAX_TURNING_SPEED,turningSpeed + 0.8*Rotate_acc *interval)
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
     }else if(turningSpeed != 0){
-        turningSpeed = Math.max(0,turningSpeed - 0.25*acceleration*interval)
+        turningSpeed = Math.max(0,turningSpeed - 0.5*Rotate_acc *interval)
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
     }else{
         deceleraion = false;
@@ -158,7 +157,6 @@ function updateDuckDirection() {
         turningDirection = 0; //reset turning Direction
         interval = 0; //reset interval
     }
-    
 }
 
 function updateUI() {
@@ -185,7 +183,7 @@ function updateUI() {
 }
 //Preload Duck Image
 const image = new Image();
-image.src = "./source/img/ped-top-view.PNG";
+image.src = "./source/img/myPed.svg";
 image.onload = () => {
     // Start the game loop only after the image is loaded
     gameLoop();
@@ -206,7 +204,7 @@ function render() {
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(duck.direction + Math.PI / 2);
-    ctx.drawImage(image, -duck.size / 2, -duck.size / 2, duck.size, duck.size);
+    ctx.drawImage(image, -duck.size / 2, 1.23*-duck.size / 2, duck.size, 1.23*duck.size);
     ctx.restore();
     updateUI();
     duck.levelUp();
@@ -225,17 +223,21 @@ addEventListener("load", () => {
 // Event listener for keydown events
 addEventListener("keydown", (e) => {
     interval = Math.min(0.8,(interval+0.01));
+    console.log(e.key);
     switch (e.key) {
+        case "ArrowLeft":
         case "q":
         case "Q":
             turnDuck(true); // Turn the boat left
             duck.pedal();
             break;
+        case "ArrowRight":
         case "e":
         case "E":
             turnDuck(false); // Turn the boat right
             duck.pedal();
             break;
+        case "ArrowDown":
         case "s":
         case "S":
             duck.brake(); // Slow down the boat
@@ -249,4 +251,6 @@ addEventListener("keydown", (e) => {
 addEventListener("keyup", (e) => {
     deceleraion = true; // reset turningDirection when no key is pressed
 });
-
+addEventListener("resize", () => {
+    init(); // Re-initialize the game on window resize
+});

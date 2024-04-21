@@ -197,3 +197,16 @@ li{
 .plus-button:hover {
     background-color: #e4bb69;
 }
+#water{
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    width: 10vw;
+    height: 10vw;
+    background-color: #8ca5ae;
+    border-radius:100%;
+    box-shadow: 0 0 0 3px none;
+    opacity: 0;
+}
