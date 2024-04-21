@@ -2,13 +2,16 @@ class Duck {
     constructor() {
         this.x = 0;
         this.y = 0;
-        this.speed = 500;
-        this.turnspeed = 0.5
+        this.speed = 0; // Start with zero speed
+        this.maxSpeed = 800; // Maximum speed of the duck boat
+        this.acceleration = 200; // Acceleration of the duck boat
+        this.drag = 10; // Drag force to simulate water resistance
+        this.turnspeed = 0.05; // Adjusted turning speed for smoother turning
         this.direction = 0;
         this.size = 250;
 
         this.level = 1;
-        this.MAXEXP = 100;
+        this.MAXEXP = 1000;
         this.distance = 0;
         this.skillpoint = 0;
         this.status = true;
@@ -18,12 +21,24 @@ class Duck {
         this.dmg = 20;
     }
 
+    // Accelerate the duck boat forward
+    pedal() {
+        // Increase speed up to the maximum speed
+        this.speed = Math.min(this.speed + this.acceleration, this.maxSpeed);
+    }
+
+    // Slow down the duck boat
+    brake() {
+        // Apply drag force to reduce speed
+        this.speed = Math.max(this.speed - this.drag, 0);
+    }
+    
     levelUp() {
         if (this.distance >= this.MAXEXP) {
             this.level++;
             this.skillpoint++;
             this.distance = 0;
-            this.MAXEXP = this.MAXEXP + 50;
+            this.MAXEXP = this.MAXEXP + 500;
         }
     }
 
@@ -46,7 +61,8 @@ class Duck {
         if (this.skillpoint <= 0) return;
         switch (type) {
             case "speed":
-                this.speed += 50;
+                this.maxSpeed += 100;
+                this.acceleration += 50;
                 break;
             case "dmg":
                 this.dmg += 10;
@@ -103,24 +119,30 @@ function updateDuckPosition() {
     let currentTime = performance.now();
     let deltaTime = (currentTime - lastUpdateTime) / 1000; // Convert milliseconds to seconds
 
-    // Update duck's position using interpolation
+    // Update duck's position based on speed and direction
     duck.x += duck.speed * Math.cos(duck.direction) * deltaTime;
     duck.y += duck.speed * Math.sin(duck.direction) * deltaTime;
-    duck.distance += (duck.speed / 10) * deltaTime;
+
+    // Update distance and apply drag force to slow down the duck boat
+    duck.distance += duck.speed * deltaTime;
+    duck.brake(); // Apply drag force
+
     lastUpdateTime = currentTime; // Update last update time
     camera.update(duck);
 }
+
 
 let lastUpdateTime = performance.now(); // Track the time of the last update
 
 let turningDirection = 0; // Variable to store the turning direction
 
 function turnDuck(isLeft) {
-    turningDirection = isLeft ? -duck.turnspeed : duck.turnspeed;
+    turningDirection = isLeft ? -1 : 1; // Simplify turning direction
 }
 
 function updateDuckDirection() {
-    duck.direction += turningDirection * 3 * Math.PI / 180; // Adjust turning speed as needed
+    // Adjust turning based on turningDirection and turning speed
+    duck.direction += turningDirection * duck.turnspeed;
 }
 
 function updateUI() {
@@ -175,35 +197,49 @@ function render() {
 }
 
 function gameLoop() {
-    setTimeout(() => {
-        updateDuckPosition(); // Update duck's position
-        updateDuckDirection(); // Update duck's direction
-        render(); // Render the game
-        // Request the next frame of the game loop
-        requestAnimationFrame(gameLoop);
-    }); // 100 milliseconds delay (0.1 second)
+    updateDuckPosition(); // Update duck's position
+    updateDuckDirection(); // Update duck's direction
+    render(); // Render the game
+    requestAnimationFrame(gameLoop); // Request the next frame of the game loop
 }
-// Initialize the animation and start the game loop when the page loads
-addEventListener("load", () => {
-    init(); // Initialize the game
-});
 
 // Event listener for keydown events
 addEventListener("keydown", (e) => {
     switch (e.key) {
         case "q":
         case "Q":
-            turnDuck(true);
+            turnDuck(true); // Turn the boat left
+            duck.pedal();
             break;
         case "e":
         case "E":
-            turnDuck(false);
+            turnDuck(false); // Turn the boat right
+            duck.pedal();
+            break;
+        case "s":
+        case "S":
+            duck.brake(); // Slow down the boat
             break;
         default:
             break;
     }
 });
+
+// Event listener for keyup events
 addEventListener("keyup", (e) => {
-    turningDirection = 0 // reset turningDirection when no key is pressed
+    // Reset turningDirection when no key is pressed
+    turningDirection = 0;
+
+    // Stop acceleration when no key is pressed
+    duck.brake();
 });
 
+// Event listener for load event
+addEventListener("load", () => {
+    init(); // Initialize the game
+});
+
+// Event listener for resize event
+addEventListener("resize", () => {
+    init(); // Re-initialize the game on window resize
+});
