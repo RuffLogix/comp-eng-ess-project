@@ -12,27 +12,27 @@
 <body>
     <button class="btn" id="abandon">
         <img src="./source/img/back.svg" alt="">
-        <p class="text" id="back">abandon this Ped</p>
+        <p class="text" id="abandon-ped">abandon this Ped</p>
     </button>
     <div class="container">
         <div class="banner" id="header"></div> <!--full strech -->
         <main><!-- Display Grid -->
             <div id="partyId">
-                <p class="text" id="ped">Your Ped’s ID:</p>
-                <p class="text" id="num">XXXXXX</p>
+                <p class="text" id="ped">Your Ped's ID:</p>
+                <p class="text" id="text-roomId">XXXXXX</p>
             </div>
             <div class="player" id="player1">
                 <div class="pbox" id="self">
                     <p class="text top" id="left">Left</p>
                     <div class="name">
-                        <p class="text" id="myname">PlayerName</p>
+                        <p class="text" id="text-username">PlayerName</p>
                     </div>
                     <p class="text status">(Yes, you)</p>
                 </div>
                 <div class="ready">
                     <label class="form-control text ">
                         Ready?
-                        <input type="checkbox" name="checkbox"  />
+                        <input type="checkbox" name="checkbox" id="player-checkbox"/>
                       </label>
                 </div>
             </div>
@@ -45,10 +45,10 @@
                     </button>
                     <p class="text status" id="playerstatus">(empty ;-;)</p>
                 </div>
-                <div class="ready">
+                <div class="ready"  style="opacity: 50%;">
                     <label class="form-control text">
                         Ready?
-                        <input type="checkbox" name="checkbox" />
+                        <input type="checkbox" name="checkbox" id="friend-checkbox" disabled/>
                       </label>
                 </div>
             </div>
@@ -62,6 +62,7 @@
         </main>
         <div class="banner" id="footer"></div><!--full strech -->
     </div>
+    <script src="./script/config.js"></script>
     <script src="./script/custom.js"></script>
 </body>
 </html>
