@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", duckControllers.getDucks);
 router.get("/:id", duckControllers.getDuck);
+router.post("/create", duckControllers.createDuck);
 router.put("/", duckControllers.updateDuck);
 router.delete("/", duckControllers.deleteDuck);
 
