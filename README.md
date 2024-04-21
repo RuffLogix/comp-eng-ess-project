@@ -1,5 +1,7 @@
 # 💻 Computer Engineering Essential Project
 
+![Project Demo](./images/demo.png)
+
 This project is about creating an entertaining interactive web application for multi-user tasks.
 
 ## Tech stack 
