@@ -25,7 +25,7 @@ class Duck {
         this.MAXLEVEL = 10;
         this.speedLevel=10;
         this.dmgLevel=10;
-        this.hpLevel=9;
+        this.hpLevel=10;
 
         this.isDragon = false;
     }
@@ -172,11 +172,11 @@ function updateDuckDirection() {
         turningSpeed = Math.min(MAX_TURNING_SPEED,turningSpeed + 0.8*Rotate_acc *interval)
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
     }else if(turningSpeed != 0){
-        turningSpeed = Math.max(0,turningSpeed - 0.5*Rotate_acc *interval)
+        turningSpeed = Math.max(0,turningSpeed - 0.5*Rotate_acc *0.05);
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
     }else{
         deceleraion = false;
-        turningSpeed = 0; //reset turningSpeedq
+        turningSpeed = 0.5; //reset turningSpeedq
         turningDirection = 0; //reset turning Direction
         interval = 0; //reset interval
     }
