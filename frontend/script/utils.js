@@ -26,7 +26,6 @@ class Duck {
         this.speedLevel=1;
         this.dmgLevel=1;
         this.hpLevel=1;
-
         this.isDragon = false;
     }
 
@@ -166,7 +165,6 @@ function turnDuck(isLeft) {
 function updateDuckDirection() {
     if (!isTurning) {
         // If not turning, reset the turning speed to default
-        console.log("not turning")
         turningSpeed = 0.5;
         if(turningDirection >0){
             turningDirection = Math.max(0,turningDirection-0.01);
@@ -251,8 +249,8 @@ function updateUI() {
 //Preload Duck Image
 const image = new Image();
 // image.src = "./source/img/myPed.svg";
-// image.src = "./source/img/ped-top-view.PNG";
-image.src = "./source/img/dragon.PNG";
+image.src = "./source/img/ped-top-view.PNG";
+// image.src = "./source/img/dragon.PNG";
 
 image.onload = () => {
     // Start the game loop only after the image is loaded
@@ -277,7 +275,7 @@ function render() {
     ctx.fillStyle = "#96D3FF";
     ctx.beginPath();
     if (!duck.isDragon && duck.speedLevel == duck.MAXLEVEL && duck.dmgLevel == duck.MAXLEVEL && duck.hpLevel == duck.MAXLEVEL){
-        // image.src = "./source/img/dragon.PNG";
+        image.src = "./source/img/dragon.PNG";
         duck.isDragon = true;
         duck.size *= 1.3;
     }
@@ -299,7 +297,6 @@ function gameLoop() {
 addEventListener("load", () => {
     init(); // Initialize the game
 });
-// Event listener for keydown events
 // Event listener for keydown events
 addEventListener("keydown", (e) => {
     switch (e.key) {
@@ -324,7 +321,6 @@ addEventListener("keydown", (e) => {
             break;
     }
 });
-
 
 // Event listener for keyup events
 addEventListener("keyup", (e) => {
