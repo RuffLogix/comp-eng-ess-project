@@ -26,7 +26,6 @@ class Duck {
         this.speedLevel=1;
         this.dmgLevel=1;
         this.hpLevel=1;
-
         this.isDragon = false;
     }
 
@@ -166,7 +165,6 @@ function turnDuck(isLeft) {
 function updateDuckDirection() {
     if (!isTurning) {
         // If not turning, reset the turning speed to default
-        console.log("not turning")
         turningSpeed = 0.5;
         if(turningDirection >0){
             turningDirection = Math.max(0,turningDirection-0.01);
@@ -300,7 +298,6 @@ addEventListener("load", () => {
     init(); // Initialize the game
 });
 // Event listener for keydown events
-// Event listener for keydown events
 addEventListener("keydown", (e) => {
     switch (e.key) {
         case "ArrowLeft":
@@ -324,7 +321,6 @@ addEventListener("keydown", (e) => {
             break;
     }
 });
-
 
 // Event listener for keyup events
 addEventListener("keyup", (e) => {
