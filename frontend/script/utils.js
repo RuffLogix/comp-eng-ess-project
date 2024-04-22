@@ -17,7 +17,6 @@ class Duck {
         this.status = true;
 
         this.maxHp = 100;
-        // this.hp = this.maxHp;
         this.hp=100;
         this.dmg = 20;
         this.regenHpRate = 5;
@@ -27,6 +26,13 @@ class Duck {
         this.dmgLevel=1;
         this.hpLevel=1;
         this.isDragon = false;
+
+        // Hitbox for the head
+        this.headWidth = 20; // Width of the head hitbox
+        this.headHeight = 20; // Height of the head hitbox
+        // Hitbox for the body
+        this.bodyWidth = 40; // Width of the body hitbox
+        this.bodyHeight = 60; // Height of the body hitbox
     }
 
     // Accelerate the duck boat forward
@@ -92,6 +98,44 @@ class Duck {
         }
         this.skillpoint--;
     }
+
+    checkCollision(object) {
+        // Calculate the boundaries of the head hitbox
+        let headLeft = this.x - this.headWidth / 2;
+        let headRight = this.x + this.headWidth / 2;
+        let headTop = this.y - this.headHeight / 2;
+        let headBottom = this.y + this.headHeight / 2;
+
+        // Calculate the boundaries of the body hitbox
+        let bodyLeft = this.x - this.bodyWidth / 2;
+        let bodyRight = this.x + this.bodyWidth / 2;
+        let bodyTop = this.y + this.headHeight / 2; // Body starts below the head
+        let bodyBottom = this.y + this.headHeight / 2 + this.bodyHeight; // Body bottom is relative to head bottom
+
+        // Calculate the boundaries of the other object
+        let objectLeft = object.x - object.width / 2;
+        let objectRight = object.x + object.width / 2;
+        let objectTop = object.y - object.height / 2;
+        let objectBottom = object.y + object.height / 2;
+
+        // Check for collision with head
+        if (headRight >= objectLeft && 
+            headLeft <= objectRight && 
+            headBottom >= objectTop && 
+            headTop <= objectBottom) {
+            return true; // Collision detected with head
+        }
+
+        // Check for collision with body
+        if (bodyRight >= objectLeft && 
+            bodyLeft <= objectRight && 
+            bodyBottom >= objectTop && 
+            bodyTop <= objectBottom) {
+            return true; // Collision detected with body
+        }
+
+        return false; // No collision
+    }
 }
 
 class Camera {
@@ -125,9 +169,8 @@ function upSkillPoint(type) {
 function generateRandomDots(numDots) {
     for (let i = 0; i < numDots; i++) {
         dots.push({
-            x: Math.random() * 1e4,
-            y: Math.random() * 1e4,
-            radius: 3
+            x: Math.random() * 5e4,
+            y: Math.random() * 5e4,
         });
     }
 }
@@ -248,9 +291,9 @@ function updateUI() {
 
 //Preload Duck Image
 const image = new Image();
-// image.src = "./source/img/myPed.svg";
+const bgImg = new Image();
+bgImg.src = "./source/img/fireball.PNG";
 image.src = "./source/img/ped-top-view.PNG";
-// image.src = "./source/img/dragon.PNG";
 
 image.onload = () => {
     // Start the game loop only after the image is loaded
@@ -262,13 +305,13 @@ function render() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#FF0000";
-    
     dots.forEach(dot => {
         ctx.beginPath();
-        ctx.arc(dot.x - camera.x + canvas.width / 2, dot.y - camera.y + canvas.height / 2, dot.radius, 0, Math.PI * 2, false);
+        ctx.drawImage(bgImg, -dot.x- camera.x + canvas.width / 2, -dot.y -camera.y + canvas.height / 2, 100, 100);
         ctx.fillStyle = "#FF0000";
         ctx.fill();
     });
+    // ctx.drawImage(bgImg, -Math.random() * 1e4- camera.x + canvas.width / 2, -Math.random() * 1e4- camera.y + canvas.height / 2, 1000, 1000);
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(duck.direction + Math.PI / 2);
