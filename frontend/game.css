@@ -86,23 +86,28 @@ li{
     height: 2rem;
     display:flex;
     border-radius: 1.5rem;
+    border-color: #6A472E; 
+    border-style: solid;
+    border-width: 0.17rem;
+    clip-path: margin-box;
+    position: relative;
+    z-index: 1;
     /* overflow: hidden; */
 }
-
 #done-distance {
-    /* position: relative;
-    z-index: 1; */
     background-color: #FDC453;
+    z-index: 0;
+    position: absolute;
     height: 100%;
-    width: 30%;
+    width: 100%;
     border-top-left-radius: 1.5rem;
     border-bottom-left-radius: 1.5rem;
     border-color: #6A472E; 
     border-style: solid;
-    border-top-width: 0.17rem;
-    border-right-width: 0rem;
-    border-bottom-width: 0.17rem;
-    border-left-width: 0.17rem;
+    border-right-width: 0.17rem;
+    border-left-width: 0rem;
+    clip-path: view-box;
+    align-self: center;
 }
 .fully-done-distance{
     border-radius: 1.5rem !important;
@@ -111,13 +116,14 @@ li{
 
 #remain-distance {
     background-color: #FFE5A3;
+    z-index: -1;
+    position: absolute;
     height: 100%;
     width: 100%;
-    border-top-right-radius: 1.5rem;
-    border-bottom-right-radius: 1.5rem;
-    border-color: #6A472E; 
-    border-style: solid;
-    border-width: 0.17rem;
+    /* border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem; */
+    clip-path: view-box;
+    align-self: center;
 }
 
 .skill{
