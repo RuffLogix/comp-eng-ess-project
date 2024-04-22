@@ -11,7 +11,7 @@ class Duck {
         this.size = 250;
 
         this.level = 1;
-        this.MAXEXP = 10000;
+        this.MAXEXP = 1000;
         this.distance = 0;
         this.skillpoint = 0;
         this.status = true;
@@ -166,17 +166,7 @@ function updateUI() {
 
     let remainDistance = document.getElementById("remain-distance");
     let doneDistance = document.getElementById("done-distance");
-    remainDistance.style.width = `${Math.max(0, 100 - (duck.distance / duck.MAXEXP) * 100)}%`;
     doneDistance.style.width = `${(duck.distance / duck.MAXEXP) * 100}%`;
-    //update Distance bar
-    let doneDistanceWidth = parseInt(doneDistance.style.width.replace("%",""));
-    if(doneDistanceWidth >= 99.25){
-        doneDistance.classList.add("fully-done-distance");
-        remainDistance.style.opacity = "0";
-    }else{
-        doneDistance.classList.remove("fully-done-distance");
-        remainDistance.style.opacity = "1";
-    }
     level.innerHTML = `Level: ${duck.level}`;
     distance.innerHTML = `${Math.round(duck.distance, 2)}/${duck.MAXEXP} m`;
     skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;

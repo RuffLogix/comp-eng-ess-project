@@ -92,7 +92,7 @@ li{
     clip-path: margin-box;
     position: relative;
     z-index: 1;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 #done-distance {
     background-color: #FDC453;
@@ -108,10 +108,6 @@ li{
     border-left-width: 0rem;
     clip-path: view-box;
     align-self: center;
-}
-.fully-done-distance{
-    border-radius: 1.5rem !important;
-    border-width: 0.17rem !important;
 }
 
 #remain-distance {
