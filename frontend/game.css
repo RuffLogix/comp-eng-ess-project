@@ -82,7 +82,7 @@ li{
     width: 92.5%;
     height: 25%;
     display: grid;
-    grid-template-columns: auto 3% 17rem;
+    grid-template-columns: auto 3% 18rem;
     grid-template-rows: 100%;
     align-items:center ;
     position:absolute ;
@@ -170,7 +170,6 @@ li{
     display:flex;
     justify-self: center;
     align-self: center;
-    transform: translateY(-0.15rem);
     border-radius: 1rem;
     border-color: #6A472E; 
     border-style: solid;
@@ -198,7 +197,7 @@ li{
     border-width: 0rem;
 }
 .plus-button{
-    justify-self: left;
+    justify-self: center;
     align-self: center;
     width: 1.8rem;
     height: 1.8rem;

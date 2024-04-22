@@ -16,9 +16,11 @@ class Duck {
         this.skillpoint = 0;
         this.status = true;
 
-        this.MAXHP = 1000;
-        this.hp = 100;
+        this.maxHp = 100;
+        // this.hp = this.maxHp;
+        this.hp=0;
         this.dmg = 20;
+        this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
         this.speedLevel=10;
@@ -47,8 +49,13 @@ class Duck {
         }
     }
 
+    regenHp(){
+        let deltaTime =(performance.now() - lastUpdateTime )/1000;
+        this.setHp(this.hp+this.regenHpRate*deltaTime);
+    }
+
     setHp(hp) {
-        this.hp = Math.min(this.MAXHP, Math.max(0, hp)); // Fix typo here
+        this.hp = Math.min(this.maxHp, Math.max(0, hp)); // Fix typo here
         return this;
     }
 
@@ -75,7 +82,8 @@ class Duck {
                 this.dmgLevel++;
                 break;
             case "hp":
-                this.setHp(this.hp + 50);
+                this.maxHp += 100;
+                this.regenHpRate +=5;
                 this.hpLevel++;
                 break;
             default:
@@ -134,6 +142,7 @@ function updateDuckPosition() {
     // Update distance and apply drag force to slow down the duck boat
     duck.distance += duck.speed * deltaTime;
     duck.brake(); // Apply drag force
+    duck.regenHp();
 
     lastUpdateTime = currentTime; // Update last update time
     camera.update(duck);
@@ -175,6 +184,8 @@ function setMaxSkillBar(elememt){
     let plusButton = elememt.parentElement.children[2];
     plusButton.style.setProperty("border-width",`0rem`);
     plusButton.style.setProperty("background-color",`rgba(255, 255, 255, 0)`);
+    plusButton.style.height = `100%`;
+    plusButton.style.width = `100%`;
     plusButton.textContent = "MAX";
     plusButton.disabled = true;
 }
@@ -193,8 +204,16 @@ function updateUI() {
     skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;
 
     let playerHp = document.getElementById("player-hp");
-    // playerHp.children[0].style.width = `${(duck.hp / duck.MAXHP) * 100}%`;
-    // playerHp.children[1].style.width = `${((duck.MAXHP-duck.hp) / duck.MAXHP) * 100}%`;
+    playerHp.children[0].style.width = `${(duck.hp / duck.maxHp) * 100}%`;
+    playerHp.children[1].style.width = `${((duck.maxHp-duck.hp) / duck.maxHp) * 100}%`;
+    if (duck.hp>=duck.maxHp){
+        playerHp.children[0].style.setProperty("border-right-width",`0rem`);
+    }
+    else{
+        playerHp.children[0].style.setProperty("border-right-width",`0.17rem`);
+    }
+    let playerHpText = document.getElementById("player-hp-text");
+    playerHpText.textContent = `HP: ${Math.round(duck.hp)}/${duck.maxHp}`;
 
     let speedBar = document.getElementById("speed-bar");
     let dmgBar = document.getElementById("Atk-bar");
