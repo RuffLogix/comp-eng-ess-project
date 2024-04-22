@@ -24,8 +24,10 @@ class Duck {
 
         this.MAXLEVEL = 10;
         this.speedLevel=10;
-        this.dmgLevel=1;
-        this.hpLevel=1;
+        this.dmgLevel=10;
+        this.hpLevel=10;
+
+        this.isDragon = false;
     }
 
     // Accelerate the duck boat forward
@@ -232,7 +234,7 @@ function updateUI() {
         dmgBar.children[0].style.width = `${(duck.dmgLevel / duck.MAXLEVEL) * 100}%`;
         dmgBar.children[1].style.width = `${((duck.MAXLEVEL-duck.dmgLevel) / duck.MAXLEVEL) * 100}%`;
     }
-    if (duck.HpLevel>=duck.MAXLEVEL){
+    if (duck.hpLevel>=duck.MAXLEVEL){
         setMaxSkillBar(hpBar);
     }
     else{
@@ -243,7 +245,10 @@ function updateUI() {
 
 //Preload Duck Image
 const image = new Image();
-image.src = "./source/img/myPed.svg";
+// image.src = "./source/img/myPed.svg";
+// image.src = "./source/img/ped-top-view.PNG";
+image.src = "./source/img/dragon.PNG";
+
 image.onload = () => {
     // Start the game loop only after the image is loaded
     gameLoop();
@@ -264,7 +269,16 @@ function render() {
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(duck.direction + Math.PI / 2);
-    ctx.drawImage(image, -duck.size / 2, 1.23*-duck.size / 2, duck.size, 1.23*duck.size);
+    ctx.fillStyle = "#96D3FF";
+    ctx.beginPath();
+    if (!duck.isDragon && duck.speedLevel == duck.MAXLEVEL && duck.dmgLevel == duck.MAXLEVEL && duck.hpLevel == duck.MAXLEVEL){
+        // image.src = "./source/img/dragon.PNG";
+        duck.isDragon = true;
+        duck.size *= 1.3;
+    }
+    ctx.arc(0,duck.size*0.075, duck.size*0.4, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.drawImage(image, -duck.size / 2, -duck.size / 2, duck.size, duck.size);
     ctx.restore();
     updateUI();
     duck.levelUp();
