@@ -23,7 +23,7 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=10;
+        this.speedLevel=1;
         this.dmgLevel=1;
         this.hpLevel=1;
     }
@@ -166,11 +166,11 @@ function updateDuckDirection() {
         turningSpeed = Math.min(MAX_TURNING_SPEED,turningSpeed + 0.8*Rotate_acc *interval)
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
     }else if(turningSpeed != 0){
-        turningSpeed = Math.max(0,turningSpeed - 0.5*Rotate_acc *interval)
+        turningSpeed = Math.max(0,turningSpeed - 0.5*Rotate_acc *0.05);
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
     }else{
         deceleraion = false;
-        turningSpeed = 0; //reset turningSpeedq
+        turningSpeed = 0.5; //reset turningSpeedq
         turningDirection = 0; //reset turning Direction
         interval = 0; //reset interval
     }
@@ -232,7 +232,7 @@ function updateUI() {
         dmgBar.children[0].style.width = `${(duck.dmgLevel / duck.MAXLEVEL) * 100}%`;
         dmgBar.children[1].style.width = `${((duck.MAXLEVEL-duck.dmgLevel) / duck.MAXLEVEL) * 100}%`;
     }
-    if (duck.HpLevel>=duck.MAXLEVEL){
+    if (duck.hpLevel>=duck.MAXLEVEL){
         setMaxSkillBar(hpBar);
     }
     else{
