@@ -9,7 +9,7 @@ class Duck {
         this.turnspeed = 0.05; // Adjusted turning speed for smoother turning
         this.direction = 0;
         this.size = 250;
-
+        
         this.level = 1;
         this.MAXEXP = 1000;
         this.distance = 0;
@@ -19,6 +19,11 @@ class Duck {
         this.MAXHP = 1000;
         this.hp = 100;
         this.dmg = 20;
+
+        this.MAXLEVEL = 10;
+        this.speedLevel=1;
+        this.dmgLevel=1;
+        this.hpLevel=1;
     }
 
     // Accelerate the duck boat forward
@@ -63,12 +68,15 @@ class Duck {
             case "speed":
                 this.maxSpeed += 100;
                 this.acceleration += 25;
+                this.speedLevel++;
                 break;
             case "dmg":
                 this.dmg += 10;
+                this.dmgLevel++;
                 break;
             case "hp":
                 this.setHp(this.hp + 50);
+                this.hpLevel++;
                 break;
             default:
                 break;
@@ -159,6 +167,17 @@ function updateDuckDirection() {
     }
 }
 
+function setMaxSkillBar(elememt){
+    elememt.children[0].style.setProperty("background-color",`#FD5353`);
+    elememt.children[0].style.width = `100%`;
+    elememt.children[1].style.width = `0%`;
+    elememt.children[0].style.setProperty("border-right-width",`0rem`);
+    let plusButton = elememt.parentElement.children[2];
+    plusButton.style.setProperty("border-width",`0rem`);
+    plusButton.style.setProperty("background-color",`rgba(255, 255, 255, 0)`);
+    plusButton.textContent = "MAX";
+}
+
 function updateUI() {
     let level = document.getElementById("level");
     let distance = document.getElementById("distance");
@@ -167,10 +186,37 @@ function updateUI() {
     let remainDistance = document.getElementById("remain-distance");
     let doneDistance = document.getElementById("done-distance");
     doneDistance.style.width = `${(duck.distance / duck.MAXEXP) * 100}%`;
+    remainDistance.style.width = `${((duck.MAXEXP-duck.distance) / duck.MAXEXP) * 100}%`;
     level.innerHTML = `Level: ${duck.level}`;
     distance.innerHTML = `${Math.round(duck.distance, 2)}/${duck.MAXEXP} m`;
     skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;
+
+    let speedBar = document.getElementById("speed-bar");
+    let dmgBar = document.getElementById("Atk-bar");
+    let hpBar = document.getElementById("Hp-bar");
+    if (duck.speedLevel>=duck.MAXLEVEL){
+        setMaxSkillBar(speedBar);
+    }
+    else{
+        speedBar.children[0].style.width = `${(duck.speedLevel / duck.MAXLEVEL) * 100}%`;
+        speedBar.children[1].style.width = `${((duck.MAXLEVEL-duck.speedLevel) / duck.MAXLEVEL) * 100}%`;
+    }
+    if (duck.dmgLevel>=duck.MAXLEVEL){
+        setMaxSkillBar(dmgBar);
+    }
+    else{
+        dmgBar.children[0].style.width = `${(duck.dmgLevel / duck.MAXLEVEL) * 100}%`;
+        dmgBar.children[1].style.width = `${((duck.MAXLEVEL-duck.dmgLevel) / duck.MAXLEVEL) * 100}%`;
+    }
+    if (duck.HpLevel>=duck.MAXLEVEL){
+        setMaxSkillBar(hpBar);
+    }
+    else{
+        hpBar.children[0].style.width = `${(duck.hpLevel / duck.MAXLEVEL) * 100}%`;
+        hpBar.children[1].style.width = `${((duck.MAXLEVEL-duck.hpLevel) / duck.MAXLEVEL) * 100}%`;
+    }
 }
+
 //Preload Duck Image
 const image = new Image();
 image.src = "./source/img/myPed.svg";

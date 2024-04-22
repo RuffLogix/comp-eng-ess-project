@@ -89,15 +89,10 @@ li{
     border-color: #6A472E; 
     border-style: solid;
     border-width: 0.17rem;
-    clip-path: margin-box;
-    position: relative;
-    z-index: 1;
     overflow: hidden;
 }
 #done-distance {
     background-color: #FDC453;
-    z-index: 0;
-    position: absolute;
     height: 100%;
     width: 100%;
     border-top-left-radius: 1.5rem;
@@ -106,19 +101,13 @@ li{
     border-style: solid;
     border-right-width: 0.17rem;
     border-left-width: 0rem;
-    clip-path: view-box;
     align-self: center;
 }
 
 #remain-distance {
     background-color: #FFE5A3;
-    z-index: -1;
-    position: absolute;
     height: 100%;
     width: 100%;
-    /* border-top-right-radius: 1.5rem;
-    border-bottom-right-radius: 1.5rem; */
-    clip-path: view-box;
     align-self: center;
 }
 
@@ -139,7 +128,7 @@ li{
     display: grid;
     width: 100%;
     height: 100%;
-    grid-template-columns: 26% 57% 17%;
+    grid-template-columns: 26% 55% 19%;
     grid-template-rows: 100%;
     justify-content: center;
 }
@@ -154,29 +143,31 @@ li{
     justify-self: center;
     align-self: center;
     transform: translateY(-0.15rem);
-}
-.done{
-    background-color: #FDC453;
-    height: 100%;
-    width: 30%;
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
+    border-radius: 1rem;
     border-color: #6A472E; 
     border-style: solid;
-    border-top-width: 0.17rem;
-    border-right-width: 0rem;
-    border-bottom-width: 0.17rem;
-    border-left-width: 0.17rem;
+    border-width: 0.17rem;
+    overflow: hidden;
+}
+.done{
+    /* background-color: #FDC453; */
+    background-color: hsl(from #FDC453 h s l);
+    height: 100%;
+    width: 30%;
+    border-color: #6A472E; 
+    border-style: solid;
+    border-right-width: 0.17rem;
+    border-left-width: 0rem;
+    align-self: center;
+    justify-self: left;
 }
 .remain{
     background-color: #FFE5A3;
     height: 100%;
     width: 70%;
-    border-top-right-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-    border-color: #6A472E; 
-    border-style: solid;
-    border-width: 0.17rem;
+    align-self: center;
+    justify-self: right;
+    border-width: 0rem;
 }
 .plus-button{
     justify-self: left;
