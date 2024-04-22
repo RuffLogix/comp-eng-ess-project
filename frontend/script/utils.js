@@ -18,7 +18,7 @@ class Duck {
 
         this.maxHp = 100;
         // this.hp = this.maxHp;
-        this.hp=0;
+        this.hp=100;
         this.dmg = 20;
         this.regenHpRate = 5;
 
@@ -76,7 +76,7 @@ class Duck {
         switch (type) {
             case "speed":
                 this.maxSpeed += 100;
-                this.acceleration += 25;
+                this.acceleration += 50;
                 this.speedLevel++;
                 break;
             case "dmg":
