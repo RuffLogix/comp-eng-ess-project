@@ -23,9 +23,9 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=10;
-        this.dmgLevel=10;
-        this.hpLevel=10;
+        this.speedLevel=1;
+        this.dmgLevel=1;
+        this.hpLevel=1;
 
         this.isDragon = false;
     }
@@ -93,10 +93,6 @@ class Duck {
         }
         this.skillpoint--;
     }
-
-    shoot(){
-        
-    }
 }
 
 class Camera {
@@ -158,29 +154,34 @@ function updateDuckPosition() {
 let lastUpdateTime = performance.now(); // Track the time of the last update
 
 let turningDirection = 0; // Variable to store the turning direction
+let turningSpeed = 0.5; // Initial turning speed
+let isTurning = false; // Flag to indicate if turning keys are pressed
+const MAX_TURNING_SPEED = 2;
 
 function turnDuck(isLeft) {
-    turningDirection = isLeft ? -1 : 1; // Simplify turning direction
+    turningDirection = isLeft ? -1 : 1; // Set turning direction
+    isTurning = true; // Set turning flag
 }
-let turningSpeed = 0.5;
-let interval = 0;
-var Rotate_acc = 0.5;
-var deceleraion = false;
-const MAX_TURNING_SPEED = 2;
+
 function updateDuckDirection() {
-    if(!deceleraion){
-        turningSpeed = Math.min(MAX_TURNING_SPEED,turningSpeed + 0.8*Rotate_acc*interval)
+    if (!isTurning) {
+        // If not turning, reset the turning speed to default
+        console.log("not turning")
+        turningSpeed = 0.5;
+        if(turningDirection >0){
+            turningDirection = Math.max(0,turningDirection-0.01);
+        }else{
+            turningDirection = Math.min(0,turningDirection+0.01);
+        }
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
-    }else if(turningSpeed != 0){
-        turningSpeed = Math.max(0,turningSpeed - 0.5*Rotate_acc *0.05);
+    } else {
+        // If turning, gradually increase the turning speed up to the maximum
+        turningSpeed = Math.min(MAX_TURNING_SPEED, turningSpeed + 0.05);
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
-    }else{
-        deceleraion = false;
-        turningSpeed = 0.5; //reset turningSpeedq
-        turningDirection = 0; //reset turning Direction
-        interval = 0; //reset interval
     }
+    console.log(turningDirection,turningSpeed)
 }
+
 
 function setMaxSkillBar(elememt){
     elememt.children[0].style.setProperty("background-color",`#FD5353`);
@@ -250,8 +251,8 @@ function updateUI() {
 //Preload Duck Image
 const image = new Image();
 // image.src = "./source/img/myPed.svg";
-image.src = "./source/img/ped-top-view.PNG";
-// image.src = "./source/img/dragon.PNG";
+// image.src = "./source/img/ped-top-view.PNG";
+image.src = "./source/img/dragon.PNG";
 
 image.onload = () => {
     // Start the game loop only after the image is loaded
@@ -276,13 +277,13 @@ function render() {
     ctx.fillStyle = "#96D3FF";
     ctx.beginPath();
     if (!duck.isDragon && duck.speedLevel == duck.MAXLEVEL && duck.dmgLevel == duck.MAXLEVEL && duck.hpLevel == duck.MAXLEVEL){
-        image.src = "./source/img/dragon.PNG";
+        // image.src = "./source/img/dragon.PNG";
         duck.isDragon = true;
+        duck.size *= 1.3;
     }
     ctx.arc(0,duck.size*0.075, duck.size*0.4, 0, 2 * Math.PI);
     ctx.fill();
-    let tmp = 1+(duck.isDragon*0.3);
-    ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+    ctx.drawImage(image, -duck.size / 2, -duck.size / 2, duck.size, duck.size);
     ctx.restore();
     updateUI();
     duck.levelUp();
@@ -299,39 +300,38 @@ addEventListener("load", () => {
     init(); // Initialize the game
 });
 // Event listener for keydown events
+// Event listener for keydown events
 addEventListener("keydown", (e) => {
-    interval = Math.min(0.8,(interval+0.02));
-    console.log(e.key);
     switch (e.key) {
         case "ArrowLeft":
         case "q":
         case "Q":
-            turnDuck(true); // Turn the boat left
+            turnDuck(true); // Turn the duck left
             duck.pedal();
             break;
         case "ArrowRight":
         case "e":
         case "E":
-            turnDuck(false); // Turn the boat right
+            turnDuck(false); // Turn the duck right
             duck.pedal();
             break;
         case "ArrowDown":
         case "s":
         case "S":
-            duck.brake(); // Slow down the boat
-            break;
-        case "f":
-        case "F":
-            if (duck.isDragon) duck.shoot();
+            duck.brake(); // Slow down the duck
             break;
         default:
             break;
     }
 });
 
+
 // Event listener for keyup events
 addEventListener("keyup", (e) => {
-    deceleraion = true; // reset turningDirection when no key is pressed
+    // Reset turning flag when turning keys are released
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "q" || e.key === "Q" || e.key === "e" || e.key === "E") {
+        isTurning = false;
+    }
 });
 addEventListener("resize", () => {
     init(); // Re-initialize the game on window resize
