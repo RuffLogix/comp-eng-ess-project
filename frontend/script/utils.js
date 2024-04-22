@@ -165,7 +165,7 @@ var deceleraion = false;
 const MAX_TURNING_SPEED = 2;
 function updateDuckDirection() {
     if(!deceleraion){
-        turningSpeed = Math.min(MAX_TURNING_SPEED,turningSpeed + 0.8*Rotate_acc *interval)
+        turningSpeed = Math.min(MAX_TURNING_SPEED,turningSpeed + 0.8*Rotate_acc*interval)
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
     }else if(turningSpeed != 0){
         turningSpeed = Math.max(0,turningSpeed - 0.5*Rotate_acc *0.05);
@@ -296,7 +296,7 @@ addEventListener("load", () => {
 });
 // Event listener for keydown events
 addEventListener("keydown", (e) => {
-    interval = Math.min(0.8,(interval+0.01));
+    interval = Math.min(0.8,(interval+0.02));
     console.log(e.key);
     switch (e.key) {
         case "ArrowLeft":
