@@ -192,6 +192,10 @@ function updateUI() {
     distance.innerHTML = `${Math.round(duck.distance, 2)}/${duck.MAXEXP} m`;
     skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;
 
+    let playerHp = document.getElementById("player-hp");
+    // playerHp.children[0].style.width = `${(duck.hp / duck.MAXHP) * 100}%`;
+    // playerHp.children[1].style.width = `${((duck.MAXHP-duck.hp) / duck.MAXHP) * 100}%`;
+
     let speedBar = document.getElementById("speed-bar");
     let dmgBar = document.getElementById("Atk-bar");
     let hpBar = document.getElementById("Hp-bar");
