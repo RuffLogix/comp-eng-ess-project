@@ -23,9 +23,9 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=1;
-        this.dmgLevel=1;
-        this.hpLevel=1;
+        this.speedLevel=10;
+        this.dmgLevel=10;
+        this.hpLevel=10;
 
         this.isDragon = false;
     }
@@ -92,6 +92,10 @@ class Duck {
                 break;
         }
         this.skillpoint--;
+    }
+
+    shoot(){
+        
     }
 }
 
@@ -246,8 +250,8 @@ function updateUI() {
 //Preload Duck Image
 const image = new Image();
 // image.src = "./source/img/myPed.svg";
-// image.src = "./source/img/ped-top-view.PNG";
-image.src = "./source/img/dragon.PNG";
+image.src = "./source/img/ped-top-view.PNG";
+// image.src = "./source/img/dragon.PNG";
 
 image.onload = () => {
     // Start the game loop only after the image is loaded
@@ -272,13 +276,13 @@ function render() {
     ctx.fillStyle = "#96D3FF";
     ctx.beginPath();
     if (!duck.isDragon && duck.speedLevel == duck.MAXLEVEL && duck.dmgLevel == duck.MAXLEVEL && duck.hpLevel == duck.MAXLEVEL){
-        // image.src = "./source/img/dragon.PNG";
+        image.src = "./source/img/dragon.PNG";
         duck.isDragon = true;
-        duck.size *= 1.3;
     }
     ctx.arc(0,duck.size*0.075, duck.size*0.4, 0, 2 * Math.PI);
     ctx.fill();
-    ctx.drawImage(image, -duck.size / 2, -duck.size / 2, duck.size, duck.size);
+    let tmp = 1+(duck.isDragon*0.3);
+    ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
     ctx.restore();
     updateUI();
     duck.levelUp();
@@ -315,6 +319,10 @@ addEventListener("keydown", (e) => {
         case "s":
         case "S":
             duck.brake(); // Slow down the boat
+            break;
+        case "f":
+        case "F":
+            if (duck.isDragon) duck.shoot();
             break;
         default:
             break;
