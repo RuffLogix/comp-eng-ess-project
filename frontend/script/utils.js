@@ -21,7 +21,7 @@ class Duck {
         this.dmg = 20;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=1;
+        this.speedLevel=10;
         this.dmgLevel=1;
         this.hpLevel=1;
     }
@@ -176,6 +176,7 @@ function setMaxSkillBar(elememt){
     plusButton.style.setProperty("border-width",`0rem`);
     plusButton.style.setProperty("background-color",`rgba(255, 255, 255, 0)`);
     plusButton.textContent = "MAX";
+    plusButton.disabled = true;
 }
 
 function updateUI() {
