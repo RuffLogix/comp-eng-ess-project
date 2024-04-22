@@ -18,14 +18,14 @@ class Duck {
 
         this.maxHp = 100;
         // this.hp = this.maxHp;
-        this.hp=0;
+        this.hp=100;
         this.dmg = 20;
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
         this.speedLevel=1;
-        this.dmgLevel=1;
-        this.hpLevel=1;
+        this.dmgLevel=10;
+        this.hpLevel=10;
 
         this.isDragon = false;
     }
@@ -76,7 +76,7 @@ class Duck {
         switch (type) {
             case "speed":
                 this.maxSpeed += 100;
-                this.acceleration += 25;
+                this.acceleration += 50;
                 this.speedLevel++;
                 break;
             case "dmg":
@@ -251,8 +251,8 @@ function updateUI() {
 //Preload Duck Image
 const image = new Image();
 // image.src = "./source/img/myPed.svg";
-// image.src = "./source/img/ped-top-view.PNG";
-image.src = "./source/img/dragon.PNG";
+image.src = "./source/img/ped-top-view.PNG";
+// image.src = "./source/img/dragon.PNG";
 
 image.onload = () => {
     // Start the game loop only after the image is loaded
@@ -277,7 +277,7 @@ function render() {
     ctx.fillStyle = "#96D3FF";
     ctx.beginPath();
     if (!duck.isDragon && duck.speedLevel == duck.MAXLEVEL && duck.dmgLevel == duck.MAXLEVEL && duck.hpLevel == duck.MAXLEVEL){
-        // image.src = "./source/img/dragon.PNG";
+        image.src = "./source/img/dragon.PNG";
         duck.isDragon = true;
         duck.size *= 1.3;
     }
