@@ -18,12 +18,12 @@ class Duck {
 
         this.maxHp = 100;
         // this.hp = this.maxHp;
-        this.hp=0;
+        this.hp=100;
         this.dmg = 20;
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=10;
+        this.speedLevel=1;
         this.dmgLevel=1;
         this.hpLevel=1;
     }
