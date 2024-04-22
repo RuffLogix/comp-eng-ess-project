@@ -320,11 +320,11 @@ function render() {
     if (!duck.isDragon && duck.speedLevel == duck.MAXLEVEL && duck.dmgLevel == duck.MAXLEVEL && duck.hpLevel == duck.MAXLEVEL){
         image.src = "./source/img/dragon.PNG";
         duck.isDragon = true;
-        duck.size *= 1.3;
     }
     ctx.arc(0,duck.size*0.075, duck.size*0.4, 0, 2 * Math.PI);
     ctx.fill();
-    ctx.drawImage(image, -duck.size / 2, -duck.size / 2, duck.size, duck.size);
+    let tmp = 1+(duck.isDragon*0.3);
+    ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
     ctx.restore();
     updateUI();
     duck.levelUp();
