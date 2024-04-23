@@ -22,13 +22,13 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=1;
-        this.dmgLevel=1;
-        this.hpLevel=1;
+        this.speedLevel=9;
+        this.dmgLevel=10;
+        this.hpLevel=10;
         this.isDragon = false;
 
         //Hitbox for Ped
-        this.radius = 15;
+        this.radius = this.size;
         //fireball section
         this.fireballCooldown = 0;
         this.fireballInterval = 1000; // Fireball cooldown in milliseconds
@@ -153,10 +153,7 @@ class Fireball {
 // Function to check collision between two objects
 function checkCollision(object1, object2) {
     let distance = Math.sqrt((object1.x - object2.x) ** 2 + (object1.y - object2.y) ** 2);
-    if(distance <= object1.radius + object2.size / 2){
-        console.log("Overlapping")
-    }
-    return distance <= object1.radius + object2.size / 2; // Assuming object2 is the dummy
+    return distance <= object1.radius + object2.radius / 2; // Assuming object2 is the dummy
 }
 
 
@@ -175,10 +172,15 @@ class Camera {
 var Ducks = [];
 var OtherDucks = Ducks.slice();
 let duck = new Duck().setX(0).setY(0); // Simplified instantiation
-OtherDucks.pop(duck);
 let camera = new Camera();
 let dots = [];
 let dummy = new Duck().setX(50).setY(50); // Simplified Dummy
+let dummy1 = new Duck().setX(100).setY(100); // Simplified Dummy
+let dummy2 = new Duck().setX(500).setY(500); // Simplified Dummy
+let dummy3 = new Duck().setX(250).setY(250); // Simplified Dummy
+
+var OtherDucks = Ducks.slice();
+OtherDucks.splice(0,1)
 
 function init() {
     let canvas = document.getElementById("canvas");
@@ -369,15 +371,16 @@ function render() {
     });
 
     // Draw dummy section
-    ctx.save(); // Save the current transformation matrix
     ctx.strokeStyle = "red"
     let tmp = 1+(duck.isDragon*0.3);
-    ctx.translate(dummy.x - camera.x + canvas.width / 2, dummy.y - camera.y + canvas.height / 2);
-    ctx.drawImage(dummyImg, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
-    // ctx.arc(-duck.size / 2 *tmp,-duck.size / 2 * tmp, duck.radius, 0, 2 * Math.PI);
-    // ctx.stroke();
-    ctx.restore(); // Restore the previous transformation matrix
+    OtherDucks.forEach(otherDuck => {
+        ctx.save(); // Save the current transformation matrix
+        ctx.translate(otherDuck.x - camera.x + canvas.width / 2, otherDuck.y - camera.y + canvas.height / 2);
+        ctx.drawImage(dummyImg, -otherDuck.size / 2 * tmp, -otherDuck.size / 2 *tmp, otherDuck.size * tmp, otherDuck.size * tmp);
+        ctx.restore(); // Restore the previous transformation matrix
+    });
     // end of dummy seciton
+
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(duck.direction + Math.PI / 2);
