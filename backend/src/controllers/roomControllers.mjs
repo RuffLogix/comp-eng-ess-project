@@ -40,6 +40,7 @@ export const createRoom = async (req, res) => {
     const room = new roomModel({
         id: roomId,
         players: [{ username, ready: false }],
+        status: false,
     });
 
     await room.save();
@@ -97,3 +98,14 @@ export const deleteRoom = async (req, res) => {
 
     res.json({ roomId, status });
 };
+
+export const startRoom = async (req, res) => {
+    const { roomId } = req.body;
+    const rooms = await roomModel.findOne({ id: roomId });
+
+    rooms.status = true;
+
+    await rooms.save();
+
+    res.json({ status: "success" });
+}
