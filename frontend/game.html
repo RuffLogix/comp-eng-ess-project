@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <script src="./script/utils.js"></script>
+    <script src="./script/ui.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Gloria+Hallelujah&family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <title>PunPed</title>
 </head>
@@ -21,7 +22,7 @@
             <li>PlayerName3<br>PlayerName3</li>
         </ol>
     </div>
-    <div class="playerContainer">
+    <div id="playerContainer">
         <p id="player-hp-text">HP: 000/999</p>
         <div class="skill-bar" id="player-hp">
             <div class="done" id="player-remaining-hp" ></div>
@@ -66,6 +67,10 @@
         </div>
     </div>
     <div id="water"></div>
+    <div id="gameover-popup">
+        <h2 id="gameover-text">GAME<br>OVER</h2>
+        <img id="gameover-img" src="source/img/peddead.PNG" alt="Ped dead" draggable="false">
+    </div>
     <!-- <script src="./game.js"></script> -->
 </body>
 </html>

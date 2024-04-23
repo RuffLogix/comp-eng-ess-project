@@ -8,6 +8,7 @@ router.post("/ready", roomControllers.readyRoom);
 router.post("/create", roomControllers.createRoom);
 router.post("/join", roomControllers.joinRoom);
 router.post("/leave", roomControllers.leaveRoom);
+router.post("/start", roomControllers.startRoom);
 router.delete("/", roomControllers.deleteRoom);
 
 export default router;

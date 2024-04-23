@@ -8,9 +8,9 @@ const roomSchema = new mongoose.Schema({
     players: {
         type: Array,
         require: true,
-    },
-    data: {
-        type: Object,
+    }, 
+    status: {
+        type: Boolean,
         require: true,
     }
 });

@@ -17,7 +17,7 @@ class Duck {
         this.status = true;
 
         this.maxHp = 100;
-        this.hp=100;
+        this.hp=0;
         this.dmg = 20;
         this.regenHpRate = 5;
 
@@ -26,6 +26,7 @@ class Duck {
         this.dmgLevel=10;
         this.hpLevel=10;
         this.isDragon = false;
+        this.isDead = true;
 
         //Hitbox for Ped
         this.radius = this.size;

@@ -8,6 +8,9 @@ const duckSchema = new mongoose.Schema({
     players: {
         type: Array,
         require: true,
+    }, data: {
+        type: Object,
+        require: true,
     }
 });
 
