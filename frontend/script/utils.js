@@ -28,10 +28,11 @@ class Duck {
         this.hpLevel=1;
         this.isDragon = false;
         this.isDead = false;
-        this.collide_with = []
+        this.Immunity = false;
+        this.Immune_time = 0;
 
         //Hitbox for Ped
-        this.radius = this.size;
+        this.radius = this.size/2;
         //fireball section
         this.fireballCooldown = 0;
         this.fireballInterval = 1000; // Fireball cooldown in milliseconds
@@ -274,25 +275,30 @@ function updateDuckDirection() {
 function DucksCollided(){ //TODO Fix multiple collision at one time
     for(let i =0;i<Ducks.length;i++){
         let currentDuck = Ducks[i];
-        // console.log(Ducks,currentDuck)
         for(let j=i+1 ; j<Ducks.length;j++){
             let  nextDuck = Ducks[j];
             if(checkCollision(currentDuck,nextDuck)){
-                if(!currentDuck.collide_with.includes(nextDuck)){
-                    console.log("Chon i sus");
-                    currentDuck.attack(nextDuck);
-                    nextDuck.attack(currentDuck);
-                    currentDuck.collide_with.push(nextDuck);
-                    nextDuck.collide_with.push(currentDuck);
-                }else{
-                    let index_current = nextDuck.collide_with.indexOf(currentDuck);
-                    let index_next = currentDuck.collide_with.indexOf(nextDuck);
-                    currentDuck.collide_with.splice(index_next,1);
-                    nextDuck.collide_with.splice(index_current,1);
-                }
+                console.log("Chon i sus 1111111");
+                    if(!currentDuck.Immunity & !nextDuck.Immunity){
+                        console.log("Chon i sus 222222");
+                        currentDuck.attack(nextDuck);
+                        nextDuck.attack(currentDuck);
+                        currentDuck.Immunity = true;
+                        nextDuck.Immunity = true;
+                        currentDuck.Immune_time += 5000;
+                        nextDuck.Immune_time += 5000;
+                        console.log(currentDuck.Immune_time,nextDuck.Immune_time)
+                    }else{
+                        if(currentDuck.Immune_time ==0){
+                            currentDuck.Immunity = false
+                        }
+                        if(nextDuck.Immune_time ==0){
+                            nextDuck.Immunity = false;
+                        }
+                        currentDuck.Immune_time =Math.max(0,(currentDuck.Immune_time-1000/60));
+                        nextDuck.Immune_time = Math.max(0,(nextDuck.Immune_time-1000/60));
+                    }
                 
-            }else{
-
             }
             
         }
