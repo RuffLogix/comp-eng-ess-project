@@ -437,17 +437,19 @@ function gameLoop() {
 }
 
 function checkFireballCollision() {
-    duck.fireballs.forEach(fireball => {
+    duck.fireballs.forEach((fireball, fireballIndex) => {
         OtherDucks.forEach(otherDuck => {
             if (checkCollision(fireball, otherDuck)) {
                 console.log("Hit");
                 // Handle hit logic here
-                fireball.hitT(otherDuck);
-                console.log(otherDuck.hp);
+                fireball.hitT(otherDuck); // Call hitT method of fireball
+                duck.fireballs.splice(fireballIndex, 1); // Remove the fireball from the array
+                console.log(otherDuck.hp); // Log updated HP of the other duck
             }
         });
     });
 }
+
 
 // Initialize the animation and start the game loop when the page loads
 addEventListener("load", () => {
