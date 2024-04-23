@@ -423,17 +423,22 @@ function gameLoop() {
         duck.fireFireball();
     }
     duck.updateFireballs();
-
     // Check for collision between fireballs and the dummy
     duck.fireballs.forEach(fireball => {
         if (checkCollision(fireball, dummy)) {
-            console.log("Fireball hit the dummy!");
+            // console.log("Fireball hit the dummy!");
             // Handle hit logic here, for example, decrease dummy's health
             dummy.setHp(dummy.hp - fireball.dmg);
         }
     });
-    for(let i =0;i<Ducks.size-1;i++){
-
+    for(let i =0;i<Ducks.length;i++){
+        // console.log("looping")
+        var currentDuck = Ducks[i];
+        for(let j=i+1;j<Ducks.length;j++){
+            var nextDuck = Ducks[j];
+            // console.log(nextDuck,j,Duck);
+            currentDuck.checkCollision(nextDuck);
+        }
     }
     render(); // Render the game
     requestAnimationFrame(gameLoop); // Request the next frame of the game loop
