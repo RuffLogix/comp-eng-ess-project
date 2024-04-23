@@ -128,14 +128,14 @@ function render() {
     });
 
     // Draw dummy section
+    ctx.save(); // Save the current transformation matrix
     ctx.strokeStyle = "red"
     let tmp = 1+(duck.isDragon*0.3);
-    OtherDucks.forEach(otherDuck => {
-        ctx.save(); // Save the current transformation matrix
-        ctx.translate(otherDuck.x - camera.x + canvas.width / 2, otherDuck.y - camera.y + canvas.height / 2);
-        ctx.drawImage(dummyImg, -otherDuck.size / 2 * tmp, -otherDuck.size / 2 *tmp, otherDuck.size * tmp, otherDuck.size * tmp);
-        ctx.restore(); // Restore the previous transformation matrix
-    });
+    ctx.translate(dummy.x - camera.x + canvas.width / 2, dummy.y - camera.y + canvas.height / 2);
+    ctx.drawImage(dummyImg, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+    // ctx.arc(-duck.size / 2 *tmp,-duck.size / 2 * tmp, duck.radius, 0, 2 * Math.PI);
+    // ctx.stroke();
+    ctx.restore(); // Restore the previous transformation matrix
     // end of dummy seciton
     if (!duck.isDead){
         ctx.save();
@@ -149,8 +149,27 @@ function render() {
         ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
         ctx.restore();
     }
-    
+
     updateUI();
     duck.levelUp();
 
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("gameover-popup").addEventListener("mouseover", () => {
+        let gameover = document.getElementById("gameover-text");
+        gameover.innerHTML = "RETRY?";
+        gameover.style.setProperty("letter-spacing",`0rem`);
+    });
+    
+    document.getElementById("gameover-popup").addEventListener("mouseout", () => {
+        let gameover = document.getElementById("gameover-text");
+        gameover.innerHTML = "GAME<br>OVER";
+        gameover.style.setProperty("letter-spacing",`1.7rem`);
+    });
+    
+    document.getElementById("gameover-popup").addEventListener("click", () => {
+        window.location.href = window.location.origin + "/frontend/index.html";
+    });
+})
+

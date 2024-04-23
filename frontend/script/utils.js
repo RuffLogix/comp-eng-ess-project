@@ -27,7 +27,7 @@ class Duck {
         this.dmgLevel=10;
         this.hpLevel=10;
         this.isDragon = false;
-        this.isDead = false;
+        this.isDead = true;
 
         //Hitbox for Ped
         this.radius = this.size;
