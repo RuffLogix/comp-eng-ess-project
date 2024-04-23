@@ -1,3 +1,6 @@
+import "dotenv/config"
+import "./src/config/db.mjs";
+
 import express from "express";
 import cors from "cors";
 
