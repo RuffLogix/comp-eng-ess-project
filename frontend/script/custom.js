@@ -44,7 +44,7 @@ function otherPlayerReady() {
         },
     }).then((res) => res.json()).then((data) => {
         const roomId = localStorage.getItem("roomId");
-        const players = data[roomId].players;
+        const players = data.find((room) => room.id === roomId).players;
 
         if (players.length < 2) {
             return;
