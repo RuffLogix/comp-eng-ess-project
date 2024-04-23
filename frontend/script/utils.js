@@ -3,7 +3,7 @@ class Duck {
         this.x = 0;
         this.y = 0;
         this.speed = 0; // Start with zero speed
-        this.maxSpeed = 8000; // Maximum speed of the duck boat
+        this.maxSpeed = 800; // Maximum speed of the duck boat
         this.acceleration = 200; // Acceleration of the duck boat
         this.drag = 10; // Drag force to simulate water resistance
         this.turnspeed = 0.05; // Adjusted turning speed for smoother turning
@@ -28,6 +28,7 @@ class Duck {
         this.hpLevel=1;
         this.isDragon = false;
         this.isDead = true;
+        this.collide_with = []
 
         //Hitbox for Ped
         this.radius = this.size;
@@ -176,10 +177,10 @@ var OtherDucks = Ducks.slice();
 let duck = new Duck().setX(0).setY(0); // Simplified instantiation
 let camera = new Camera();
 let dots = [];
-let dummy = new Duck().setX(50).setY(50); // Simplified Dummy
-let dummy1 = new Duck().setX(100).setY(100); // Simplified Dummy
-let dummy2 = new Duck().setX(500).setY(500); // Simplified Dummy
-let dummy3 = new Duck().setX(250).setY(250); // Simplified Dummy
+// let dummy = new Duck().setX(550).setY(550); // Simplified Dummy
+// let dummy1 = new Duck().setX(150).setY(150); // Simplified Dummy
+// let dummy2 = new Duck().setX(500).setY(500); // Simplified Dummy
+// let dummy3 = new Duck().setX(250).setY(250); // Simplified Dummy
 
 var OtherDucks = Ducks.slice();
 OtherDucks.splice(0,1)
@@ -266,6 +267,34 @@ function updateDuckDirection() {
     // console.log(turningDirection,turningSpeed)
 }
 
+function DucksCollided(){
+    for(let i =0;i<Ducks.length;i++){
+        let currentDuck = Ducks[i];
+        // console.log(Ducks,currentDuck)
+        for(let j=i+1 ; j<Ducks.length;j++){
+            let  nextDuck = Ducks[j];
+            if(checkCollision(currentDuck,nextDuck)){
+                if(!currentDuck.collide_with.includes(nextDuck)){
+                    console.log("Chon i sus");
+                    currentDuck.attack(nextDuck);
+                    nextDuck.attack(currentDuck);
+                    currentDuck.collide_with.push(nextDuck);
+                    nextDuck.collide_with.push(currentDuck);
+                }else{
+                    let index_current = nextDuck.collide_with.indexOf(currentDuck);
+                    let index_next = currentDuck.collide_with.indexOf(nextDuck);
+                    currentDuck.collide_with.splice(index_next,1);
+                    nextDuck.collide_with.splice(index_current,1);
+                }
+                
+            }else{
+
+            }
+            
+        }
+    }
+}
+
 function gameLoop() {
     updateDuckPosition(); // Update duck's position
     updateDuckDirection(); // Update duck's direction
@@ -274,15 +303,8 @@ function gameLoop() {
     }
     duck.updateFireballs();
 
-    checkFireballCollision(); // Check for collision with OtherDucks
-    for(let i =0;i<Ducks.length;i++){
-        let currentDuck = Ducks[i];
-        // console.log(Ducks,currentDuck)
-        for(let j=i+1 ; j<Ducks.length;j++){
-            let  nextDuck = Ducks[j];
-            checkCollision(currentDuck,nextDuck);
-        }
-    }
+    DucksCollided();
+    checkFireballCollision(); // Check for collision with Fireballs
     removeDeadDucks();
     removeInactiveFireballs();
     
