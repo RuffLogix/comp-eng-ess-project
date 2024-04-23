@@ -22,9 +22,9 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=10;
-        this.dmgLevel=10;
-        this.hpLevel=10;
+        this.speedLevel=1;
+        this.dmgLevel=1;
+        this.hpLevel=1;
         this.isDragon = false;
 
         // Hitbox for the head
@@ -177,6 +177,7 @@ class Fireball {
         this.direction = direction;
         this.initial_direction = direction;
         this.dmg = 100;
+        this.inactiveTime = 0; // Initialize inactive time to 0
     }
 
     
@@ -444,11 +445,34 @@ function gameLoop() {
 
     checkFireballCollision(); // Check for collision with OtherDucks
     
-    for(let i =0;i<Ducks.size-1;i++){
-
-    }
+    removeDeadDucks();
+    removeInactiveFireballs();
     render(); // Render the game
     requestAnimationFrame(gameLoop); // Request the next frame of the game loop
+}
+
+function removeInactiveFireballs() {
+    duck.fireballs.forEach((fireball, index) => {
+        // Check if the fireball has been inactive for 1 second
+        if (fireball.inactiveTime >= 5000) {
+            duck.fireballs.splice(index, 1); // Remove the fireball from the array
+        } else {
+            // Increment the inactive time of the fireball
+            fireball.inactiveTime += 1000 / 60; // Assuming 60 frames per second
+        }
+    });
+}
+
+function removeDeadDucks() {
+    for (let i = 0; i < OtherDucks.length; i++) {
+        if (OtherDucks[i].hp <= 0) {
+            console.log("Duck defeated!");
+            // Remove the duck from the array
+            OtherDucks.splice(i, 1);
+            // Decrement the loop index to account for the removed duck
+            i--;
+        }
+    }
 }
 
 function checkFireballCollision() {
