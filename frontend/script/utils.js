@@ -22,17 +22,13 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=10;
-        this.dmgLevel=10;
-        this.hpLevel=10;
+        this.speedLevel=1;
+        this.dmgLevel=1;
+        this.hpLevel=1;
         this.isDragon = false;
 
-        // Hitbox for the head
-        this.headWidth = 50; // Width of the head hitbox
-        this.headHeight = 50; // Height of the head hitbox
-        // Hitbox for the body
-        this.bodyWidth = 200; // Width of the body hitbox
-        this.bodyHeight = 200; // Height of the body hitbox
+        //Hitbox for Ped
+        this.radius = 15;
         //fireball section
         this.fireballCooldown = 0;
         this.fireballInterval = 1000; // Fireball cooldown in milliseconds
@@ -108,46 +104,6 @@ class Duck {
         this.skillpoint--;
     }
 
-    checkCollision(object) {
-        // Calculate the boundaries of the head hitbox
-        let headLeft = this.x - this.headWidth / 2;
-        let headRight = this.x + this.headWidth / 2;
-        let headTop = this.y - this.headHeight / 2;
-        let headBottom = this.y + this.headHeight / 2;
-
-        // Calculate the boundaries of the body hitbox
-        let bodyLeft = this.x - this.bodyWidth / 2;
-        let bodyRight = this.x + this.bodyWidth / 2;
-        let bodyTop = this.y + this.headHeight / 2; // Body starts below the head
-        let bodyBottom = this.y + this.headHeight / 2 + this.bodyHeight; // Body bottom is relative to head bottom
-
-        // Calculate the boundaries of the other object
-        let objectLeft = object.x - object.size / 2;
-        let objectRight = object.x + object.size / 2;
-        let objectTop = object.y - object.size / 2;
-        let objectBottom = object.y + object.size / 2;
-
-        // Check for collision with head
-        if (headRight >= objectLeft && 
-            headLeft <= objectRight && 
-            headBottom >= objectTop && 
-            headTop <= objectBottom) {
-                console.log("Head hit")
-            return true; // Collision detected with head
-        }
-
-        // Check for collision with body
-        if (bodyRight >= objectLeft && 
-            bodyLeft <= objectRight && 
-            bodyBottom >= objectTop && 
-            bodyTop <= objectBottom) {
-                console.log("Body hit")
-            return true; // Collision detected with body
-        }
-
-        return false; // No collision
-
-    }
     // for fireball
     fireFireball() {
         if (this.fireballCooldown <= 0) {
@@ -196,6 +152,9 @@ class Fireball {
 // Function to check collision between two objects
 function checkCollision(object1, object2) {
     let distance = Math.sqrt((object1.x - object2.x) ** 2 + (object1.y - object2.y) ** 2);
+    if(distance <= object1.radius + object2.size / 2){
+        console.log("Overlapping")
+    }
     return distance <= object1.radius + object2.size / 2; // Assuming object2 is the dummy
 }
 
@@ -213,8 +172,8 @@ class Camera {
 }
 
 var Ducks = [];
-var OtherDucks = Ducks;
-let duck = new Duck().setX(100).setY(100); // Simplified instantiation
+var OtherDucks = Ducks.slice();
+let duck = new Duck().setX(0).setY(0); // Simplified instantiation
 OtherDucks.pop(duck);
 let camera = new Camera();
 let dots = [];
@@ -410,12 +369,14 @@ function render() {
 
     // Draw dummy section
     ctx.save(); // Save the current transformation matrix
+    ctx.strokeStyle = "red"
     let tmp = 1+(duck.isDragon*0.3);
     ctx.translate(dummy.x - camera.x + canvas.width / 2, dummy.y - camera.y + canvas.height / 2);
     ctx.drawImage(dummyImg, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+    // ctx.arc(-duck.size / 2 *tmp,-duck.size / 2 * tmp, duck.radius, 0, 2 * Math.PI);
+    // ctx.stroke();
     ctx.restore(); // Restore the previous transformation matrix
-
-
+    // end of dummy seciton
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(duck.direction + Math.PI / 2);
@@ -428,6 +389,10 @@ function render() {
     ctx.arc(0,duck.size*0.075, duck.size*0.4, 0, 2 * Math.PI);
     ctx.fill();
     ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+
+      // Draw rectangle relative to the duck's position
+    
+    // console.log(dummy.x,dummy.y)
     ctx.restore();
     updateUI();
     duck.levelUp();
@@ -444,8 +409,13 @@ function gameLoop() {
 
     checkFireballCollision(); // Check for collision with OtherDucks
     
-    for(let i =0;i<Ducks.size-1;i++){
-
+    for(let i =0;i<Ducks.length;i++){
+        let currentDuck = Ducks[i];
+        // console.log(Ducks,currentDuck)
+        for(let j=i+1 ; j<Ducks.length;j++){
+            let  nextDuck = Ducks[j];
+            checkCollision(currentDuck,nextDuck);
+        }
     }
     render(); // Render the game
     requestAnimationFrame(gameLoop); // Request the next frame of the game loop
