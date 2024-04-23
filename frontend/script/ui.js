@@ -79,7 +79,7 @@ const bgImg = new Image();
 const dummyImg = new Image();
 const fireballImg = new Image();
 const bgImgSize = 200;
-
+const tableSize = 1e5;
 image.src = "./source/img/ped-top-view.PNG";
 bgImg.src = "./source/img/bg5.PNG";
 fireballImg.src = "./source/img/fireball.PNG";
@@ -150,6 +150,14 @@ function render() {
         ctx.restore();
     }
 
+    ctx.beginPath();
+    ctx.save();
+    ctx.translate(-(tableSize/4)- camera.x + canvas.width / 2, -(tableSize/4) -camera.y + canvas.height / 2);
+    ctx.fillStyle = "#FF0000";
+    ctx.rect(-(tableSize/4),-(tableSize/4),(tableSize),(tableSize));
+    ctx.stroke();
+    ctx.restore();
+    // console.log(duck.x+' '+duck.y);
     updateUI();
     duck.levelUp();
 
