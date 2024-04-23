@@ -23,11 +23,12 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=9;
-        this.dmgLevel=10;
-        this.hpLevel=10;
+        this.speedLevel=1;
+        this.dmgLevel=1;
+        this.hpLevel=1;
         this.isDragon = false;
         this.isDead = true;
+        this.collide_with = []
 
         //Hitbox for Ped
         this.radius = this.size;
@@ -87,7 +88,7 @@ class Duck {
         if (this.skillpoint <= 0) return;
         switch (type) {
             case "speed":
-                this.maxSpeed += 100;
+                this.maxSpeed += 250;
                 this.acceleration += 50;
                 this.speedLevel++;
                 break;
@@ -176,10 +177,10 @@ var OtherDucks = Ducks.slice();
 let duck = new Duck().setX(0).setY(0); // Simplified instantiation
 let camera = new Camera();
 let dots = [];
-let dummy = new Duck().setX(50).setY(50); // Simplified Dummy
-let dummy1 = new Duck().setX(100).setY(100); // Simplified Dummy
-let dummy2 = new Duck().setX(500).setY(500); // Simplified Dummy
-let dummy3 = new Duck().setX(250).setY(250); // Simplified Dummy
+// let dummy = new Duck().setX(550).setY(550); // Simplified Dummy
+// let dummy1 = new Duck().setX(150).setY(150); // Simplified Dummy
+// let dummy2 = new Duck().setX(500).setY(500); // Simplified Dummy
+// let dummy3 = new Duck().setX(250).setY(250); // Simplified Dummy
 
 var OtherDucks = Ducks.slice();
 OtherDucks.splice(0,1)
@@ -215,13 +216,19 @@ function generateRandomDots(numDots) {
 function updateDuckPosition() {
     let currentTime = performance.now();
     let deltaTime = (currentTime - lastUpdateTime) / 1000; // Convert milliseconds to seconds
-
+    let new_x = duck.x + (duck.speed * Math.cos(duck.direction) * deltaTime);
+    let new_y = duck.y + duck.speed * Math.sin(duck.direction) * deltaTime;
     // Update duck's position based on speed and direction
-    duck.x += duck.speed * Math.cos(duck.direction) * deltaTime;
-    duck.y += duck.speed * Math.sin(duck.direction) * deltaTime;
-
-    // Update distance and apply drag force to slow down the duck boat
-    duck.distance += duck.speed * deltaTime;
+    if(Math.abs(new_x)<=5e4){
+        duck.x = new_x;
+    }
+    if(Math.abs(new_y)<=5e4){
+        duck.y = new_y
+    }
+    if(Math.abs(new_x)<=5e4&Math.abs(new_y)<=5e4){
+        duck.distance += duck.speed * deltaTime; //Update distance 
+    }
+    // Apply drag force to slow down the duck boat
     duck.brake(); // Apply drag force
     duck.regenHp();
 
@@ -260,6 +267,34 @@ function updateDuckDirection() {
     // console.log(turningDirection,turningSpeed)
 }
 
+function DucksCollided(){
+    for(let i =0;i<Ducks.length;i++){
+        let currentDuck = Ducks[i];
+        // console.log(Ducks,currentDuck)
+        for(let j=i+1 ; j<Ducks.length;j++){
+            let  nextDuck = Ducks[j];
+            if(checkCollision(currentDuck,nextDuck)){
+                if(!currentDuck.collide_with.includes(nextDuck)){
+                    console.log("Chon i sus");
+                    currentDuck.attack(nextDuck);
+                    nextDuck.attack(currentDuck);
+                    currentDuck.collide_with.push(nextDuck);
+                    nextDuck.collide_with.push(currentDuck);
+                }else{
+                    let index_current = nextDuck.collide_with.indexOf(currentDuck);
+                    let index_next = currentDuck.collide_with.indexOf(nextDuck);
+                    currentDuck.collide_with.splice(index_next,1);
+                    nextDuck.collide_with.splice(index_current,1);
+                }
+                
+            }else{
+
+            }
+            
+        }
+    }
+}
+
 function gameLoop() {
     updateDuckPosition(); // Update duck's position
     updateDuckDirection(); // Update duck's direction
@@ -268,15 +303,8 @@ function gameLoop() {
     }
     duck.updateFireballs();
 
-    checkFireballCollision(); // Check for collision with OtherDucks
-    for(let i =0;i<Ducks.length;i++){
-        let currentDuck = Ducks[i];
-        // console.log(Ducks,currentDuck)
-        for(let j=i+1 ; j<Ducks.length;j++){
-            let  nextDuck = Ducks[j];
-            checkCollision(currentDuck,nextDuck);
-        }
-    }
+    DucksCollided();
+    checkFireballCollision(); // Check for collision with Fireballs
     removeDeadDucks();
     removeInactiveFireballs();
     
