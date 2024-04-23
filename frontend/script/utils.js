@@ -221,7 +221,7 @@ function init() {
     let canvas = document.getElementById("canvas");
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
-    generateRandomDots(10000);
+    generateRandomDots(5000);
 }
 
 function upSkillPoint(type) {
@@ -234,8 +234,15 @@ function generateRandomDots(numDots) {
         dots.push({
             x: Math.random() * 5e4,
             y: Math.random() * 5e4,
+            imgSrc: "./source/img/bg" + (Math.floor(Math.random()*4)+2) +".PNG",
+            size: (Math.random() * 50) +150,
+            angle: Math.random() * 360,
+            img: new Image()
         });
     }
+    dots.forEach(dot => {
+        dot.img.src=dot.imgSrc;
+    });
 }
 
 function updateDuckPosition() {
@@ -359,9 +366,10 @@ const image = new Image();
 const bgImg = new Image();
 const dummyImg = new Image();
 const fireballImg = new Image();
+const bgImgSize = 200;
 
 image.src = "./source/img/ped-top-view.PNG";
-bgImg.src = "./source/img/fireball.PNG";
+bgImg.src = "./source/img/bg5.PNG";
 fireballImg.src = "./source/img/fireball.PNG";
 dummyImg.src = "./source/img/ped-top-view.PNG"
 
@@ -375,11 +383,18 @@ function render() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#FF0000";
+
     dots.forEach(dot => {
         ctx.beginPath();
-        ctx.drawImage(bgImg, -dot.x- camera.x + canvas.width / 2, -dot.y -camera.y + canvas.height / 2, 100, 100);
+        ctx.save();
+        // ctx.translate(dummy.x - camera.x + canvas.width / 2, dummy.y - camera.y + canvas.height / 2);
+        // ctx.drawImage(dummyImg, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+        ctx.translate(-dot.x- camera.x + canvas.width / 2,-dot.y -camera.y + canvas.height / 2);
+        ctx.rotate(dot.angle + Math.PI / 2);
+        ctx.drawImage(dot.img, -dot.x/ 2, -dot.y / 2, dot.size,dot.size);
         ctx.fillStyle = "#FF0000";
         ctx.fill();
+        ctx.restore();
     });
 
     duck.fireballs.forEach(fireball => {
