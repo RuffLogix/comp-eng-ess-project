@@ -22,9 +22,9 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=1;
-        this.dmgLevel=1;
-        this.hpLevel=1;
+        this.speedLevel=10;
+        this.dmgLevel=10;
+        this.hpLevel=10;
         this.isDragon = false;
 
         // Hitbox for the head
@@ -33,6 +33,10 @@ class Duck {
         // Hitbox for the body
         this.bodyWidth = 40; // Width of the body hitbox
         this.bodyHeight = 60; // Height of the body hitbox
+        //fireball section
+        this.fireballCooldown = 0;
+        this.fireballInterval = 1000; // Fireball cooldown in milliseconds
+        this.fireballs = []; // Array to store fireball instances
     }
 
     // Accelerate the duck boat forward
@@ -136,8 +140,42 @@ class Duck {
 
         return false; // No collision
     }
-}
+    // for fireball
+    fireFireball() {
+        if (this.fireballCooldown <= 0) {
+            // Create a new fireball instance and add it to the array
+            this.fireballs.push(new Fireball(this.x + Math.cos(this.direction) * (this.size / 2), this.y + Math.sin(this.direction) * (this.size / 2), this.direction));
+            // Reset the cooldown
+            this.fireballCooldown = this.fireballInterval;
+        }
+    }
 
+    updateFireballs() {
+        // Update each fireball's position
+        this.fireballs.forEach(fireball => {
+            fireball.update();
+        });
+        // Decrease the cooldown
+        this.fireballCooldown -= 5;
+    }
+}
+class Fireball {
+    constructor(x, y, direction) {
+        this.x = x;
+        this.y = y;
+        this.speed = 10 + duck.speed/100;
+        this.radius = 70;
+        this.direction = direction;
+        this.initial_direction = direction;
+        this.dmg = 100;
+    }
+
+    update() {
+        // Update fireball's position based on speed and direction
+        this.x += this.speed * Math.cos(this.direction);
+        this.y += this.speed * Math.sin(this.direction);
+    }
+}
 class Camera {
     constructor() {
         this.x = 0;
@@ -220,7 +258,7 @@ function updateDuckDirection() {
         turningSpeed = Math.min(MAX_TURNING_SPEED, turningSpeed + 0.05);
         duck.direction += turningDirection * turningSpeed * Math.PI / 180; // Adjust turning speed as needed
     }
-    console.log(turningDirection,turningSpeed)
+    // console.log(turningDirection,turningSpeed)
 }
 
 
@@ -292,6 +330,8 @@ function updateUI() {
 //Preload Duck Image
 const image = new Image();
 const bgImg = new Image();
+const fireballImg = new Image();
+fireballImg.src = "./source/img/fireball.PNG";
 bgImg.src = "./source/img/fireball.PNG";
 image.src = "./source/img/ped-top-view.PNG";
 
@@ -311,7 +351,16 @@ function render() {
         ctx.fillStyle = "#FF0000";
         ctx.fill();
     });
-    // ctx.drawImage(bgImg, -Math.random() * 1e4- camera.x + canvas.width / 2, -Math.random() * 1e4- camera.y + canvas.height / 2, 1000, 1000);
+
+    duck.fireballs.forEach(fireball => {
+        // Rotate the fireball image by 90 degrees
+        ctx.save(); // Save the current transformation matrix
+        ctx.translate(fireball.x - camera.x + canvas.width / 2, fireball.y - camera.y + canvas.height / 2);
+        ctx.rotate(fireball.initial_direction+ Math.PI / 2); // Rotate by 90 degrees
+        ctx.drawImage(fireballImg, -fireball.radius, -fireball.radius, fireball.radius * 2, fireball.radius * 2);//Rotate fireballImg to sync with duck initial direction
+        ctx.restore(); // Restore the previous transformation matrix
+    });
+
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(duck.direction + Math.PI / 2);
@@ -328,11 +377,17 @@ function render() {
     ctx.restore();
     updateUI();
     duck.levelUp();
+
 }
 
 function gameLoop() {
     updateDuckPosition(); // Update duck's position
     updateDuckDirection(); // Update duck's direction
+    if(duck.isDragon){
+        duck.fireFireball();
+    }
+    duck.updateFireballs();
+
     render(); // Render the game
     requestAnimationFrame(gameLoop); // Request the next frame of the game loop
 }
@@ -360,6 +415,8 @@ addEventListener("keydown", (e) => {
         case "S":
             duck.brake(); // Slow down the duck
             break;
+        case "f":
+        case "F":
         default:
             break;
     }
