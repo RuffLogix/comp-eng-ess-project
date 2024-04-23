@@ -27,7 +27,7 @@ class Duck {
         this.dmgLevel=1;
         this.hpLevel=1;
         this.isDragon = false;
-        this.isDead = true;
+        this.isDead = false;
         this.collide_with = []
 
         //Hitbox for Ped
@@ -177,10 +177,10 @@ var OtherDucks = Ducks.slice();
 let duck = new Duck().setX(0).setY(0); // Simplified instantiation
 let camera = new Camera();
 let dots = [];
-// let dummy = new Duck().setX(550).setY(550); // Simplified Dummy
-// let dummy1 = new Duck().setX(150).setY(150); // Simplified Dummy
-// let dummy2 = new Duck().setX(500).setY(500); // Simplified Dummy
-// let dummy3 = new Duck().setX(250).setY(250); // Simplified Dummy
+let dummy = new Duck().setX(550).setY(550); // Simplified Dummy
+let dummy1 = new Duck().setX(1500).setY(1500); // Simplified Dummy
+let dummy2 = new Duck().setX(5000).setY(500); // Simplified Dummy
+let dummy3 = new Duck().setX(2500).setY(250); // Simplified Dummy
 
 var OtherDucks = Ducks.slice();
 OtherDucks.splice(0,1)
