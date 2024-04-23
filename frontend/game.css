@@ -230,6 +230,37 @@ li{
     box-shadow: 0 0 0 3px none;
     opacity: 0;
 }
+
+#gameover-popup{
+    position: absolute;
+    display: grid;
+    height: 17rem;
+    width: 30rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* background-color: #FDC453; */
+    text-align: center;
+}
+#gameover-img{
+    position: absolute;
+    width: 100%;
+    height: auto;
+    transform: translateY(-29%);
+}
+#gameover-text{
+    position: absolute;
+    align-self: center;
+    font-weight: normal;
+    font-size: 8rem; /*2em*/
+    color: #FD5353;
+    -webkit-text-stroke: 0.5rem #413533;
+    paint-order: stroke fill;
+    justify-self: center;
+    transform: translateY(-1rem);
+    line-height: 90%;
+    letter-spacing: 1.7rem;
+}
 /* #canvas{
     background-image: url("./source/img/fireball.PNG");
 } */
