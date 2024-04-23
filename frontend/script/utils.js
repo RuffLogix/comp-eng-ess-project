@@ -37,6 +37,11 @@ class Duck {
         this.fireballCooldown = 0;
         this.fireballInterval = 1000; // Fireball cooldown in milliseconds
         this.fireballs = []; // Array to store fireball instances
+        Objects.push(this);// Add to Objects array
+    }
+
+    attack(duck){
+        duck.setHp(duck.hp-this.dmg);
     }
 
     // Accelerate the duck boat forward
@@ -139,6 +144,7 @@ class Duck {
         }
 
         return false; // No collision
+
     }
     // for fireball
     fireFireball() {
@@ -168,14 +174,24 @@ class Fireball {
         this.direction = direction;
         this.initial_direction = direction;
         this.dmg = 100;
+        Objects.push(this); // Add to Objects array
     }
+
+    
+
+    hitT(duck){
+        duck.setHp(duck.hp-this.dmg);
+    }
+    
 
     update() {
         // Update fireball's position based on speed and direction
         this.x += this.speed * Math.cos(this.direction);
         this.y += this.speed * Math.sin(this.direction);
     }
+    
 }
+
 class Camera {
     constructor() {
         this.x = 0;
@@ -187,10 +203,11 @@ class Camera {
         this.y = duck.y;
     }
 }
-
+var Objects = [];
 let duck = new Duck().setX(100).setY(100); // Simplified instantiation
 let camera = new Camera();
 let dots = [];
+let dummy = new Duck().setX(50).setY(50); // Simplified Dummy
 
 function init() {
     let canvas = document.getElementById("canvas");
@@ -330,10 +347,13 @@ function updateUI() {
 //Preload Duck Image
 const image = new Image();
 const bgImg = new Image();
+const dummyImg = new Image();
 const fireballImg = new Image();
-fireballImg.src = "./source/img/fireball.PNG";
-bgImg.src = "./source/img/fireball.PNG";
+
 image.src = "./source/img/ped-top-view.PNG";
+bgImg.src = "./source/img/fireball.PNG";
+fireballImg.src = "./source/img/fireball.PNG";
+dummyImg.src = "./source/img/ped-top-view.PNG"
 
 image.onload = () => {
     // Start the game loop only after the image is loaded
@@ -353,13 +373,20 @@ function render() {
     });
 
     duck.fireballs.forEach(fireball => {
-        // Rotate the fireball image by 90 degrees
         ctx.save(); // Save the current transformation matrix
         ctx.translate(fireball.x - camera.x + canvas.width / 2, fireball.y - camera.y + canvas.height / 2);
         ctx.rotate(fireball.initial_direction+ Math.PI / 2); // Rotate by 90 degrees
         ctx.drawImage(fireballImg, -fireball.radius, -fireball.radius, fireball.radius * 2, fireball.radius * 2);//Rotate fireballImg to sync with duck initial direction
         ctx.restore(); // Restore the previous transformation matrix
     });
+
+    // Draw dummy section
+    ctx.save(); // Save the current transformation matrix
+    let tmp = 1+(duck.isDragon*0.3);
+    ctx.translate(dummy.x - camera.x + canvas.width / 2, dummy.y - camera.y + canvas.height / 2);
+    ctx.drawImage(dummyImg, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+    ctx.restore(); // Restore the previous transformation matrix
+
 
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
@@ -372,7 +399,6 @@ function render() {
     }
     ctx.arc(0,duck.size*0.075, duck.size*0.4, 0, 2 * Math.PI);
     ctx.fill();
-    let tmp = 1+(duck.isDragon*0.3);
     ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
     ctx.restore();
     updateUI();
@@ -388,9 +414,25 @@ function gameLoop() {
     }
     duck.updateFireballs();
 
+    // Check for collision between fireballs and the dummy
+    duck.fireballs.forEach(fireball => {
+        if (checkCollision(fireball, dummy)) {
+            console.log("Fireball hit the dummy!");
+            // Handle hit logic here, for example, decrease dummy's health
+            dummy.setHp(dummy.hp - fireball.dmg);
+        }
+    });
+
     render(); // Render the game
     requestAnimationFrame(gameLoop); // Request the next frame of the game loop
 }
+
+// Function to check collision between two objects
+function checkCollision(object1, object2) {
+    let distance = Math.sqrt((object1.x - object2.x) ** 2 + (object1.y - object2.y) ** 2);
+    return distance <= object1.radius + object2.size / 2; // Assuming object2 is the dummy
+}
+
 // Initialize the animation and start the game loop when the page loads
 addEventListener("load", () => {
     init(); // Initialize the game
