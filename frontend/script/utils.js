@@ -28,16 +28,16 @@ class Duck {
         this.isDragon = false;
 
         // Hitbox for the head
-        this.headWidth = 20; // Width of the head hitbox
-        this.headHeight = 20; // Height of the head hitbox
+        this.headWidth = 50; // Width of the head hitbox
+        this.headHeight = 50; // Height of the head hitbox
         // Hitbox for the body
-        this.bodyWidth = 40; // Width of the body hitbox
-        this.bodyHeight = 60; // Height of the body hitbox
+        this.bodyWidth = 200; // Width of the body hitbox
+        this.bodyHeight = 200; // Height of the body hitbox
         //fireball section
         this.fireballCooldown = 0;
         this.fireballInterval = 1000; // Fireball cooldown in milliseconds
         this.fireballs = []; // Array to store fireball instances
-        Objects.push(this);// Add to Objects array
+        Ducks.push(this);// Add to Objects array
     }
 
     attack(duck){
@@ -122,16 +122,17 @@ class Duck {
         let bodyBottom = this.y + this.headHeight / 2 + this.bodyHeight; // Body bottom is relative to head bottom
 
         // Calculate the boundaries of the other object
-        let objectLeft = object.x - object.width / 2;
-        let objectRight = object.x + object.width / 2;
-        let objectTop = object.y - object.height / 2;
-        let objectBottom = object.y + object.height / 2;
+        let objectLeft = object.x - object.size / 2;
+        let objectRight = object.x + object.size / 2;
+        let objectTop = object.y - object.size / 2;
+        let objectBottom = object.y + object.size / 2;
 
         // Check for collision with head
         if (headRight >= objectLeft && 
             headLeft <= objectRight && 
             headBottom >= objectTop && 
             headTop <= objectBottom) {
+                console.log("Head hit")
             return true; // Collision detected with head
         }
 
@@ -140,6 +141,7 @@ class Duck {
             bodyLeft <= objectRight && 
             bodyBottom >= objectTop && 
             bodyTop <= objectBottom) {
+                console.log("Body hit")
             return true; // Collision detected with body
         }
 
@@ -165,6 +167,7 @@ class Duck {
         this.fireballCooldown -= 5;
     }
 }
+
 class Fireball {
     constructor(x, y, direction) {
         this.x = x;
@@ -174,7 +177,6 @@ class Fireball {
         this.direction = direction;
         this.initial_direction = direction;
         this.dmg = 100;
-        Objects.push(this); // Add to Objects array
     }
 
     
@@ -191,6 +193,12 @@ class Fireball {
     }
     
 }
+// Function to check collision between two objects
+function checkCollision(object1, object2) {
+    let distance = Math.sqrt((object1.x - object2.x) ** 2 + (object1.y - object2.y) ** 2);
+    return distance <= object1.radius + object2.size / 2; // Assuming object2 is the dummy
+}
+
 
 class Camera {
     constructor() {
@@ -203,7 +211,7 @@ class Camera {
         this.y = duck.y;
     }
 }
-var Objects = [];
+var Ducks = [];
 let duck = new Duck().setX(100).setY(100); // Simplified instantiation
 let camera = new Camera();
 let dots = [];
@@ -292,6 +300,8 @@ function setMaxSkillBar(elememt){
     plusButton.textContent = "MAX";
     plusButton.disabled = true;
 }
+
+
 
 function updateUI() {
     let level = document.getElementById("level");
@@ -422,15 +432,11 @@ function gameLoop() {
             dummy.setHp(dummy.hp - fireball.dmg);
         }
     });
+    for(let i =0;i<Ducks.size-1;i++){
 
+    }
     render(); // Render the game
     requestAnimationFrame(gameLoop); // Request the next frame of the game loop
-}
-
-// Function to check collision between two objects
-function checkCollision(object1, object2) {
-    let distance = Math.sqrt((object1.x - object2.x) ** 2 + (object1.y - object2.y) ** 2);
-    return distance <= object1.radius + object2.size / 2; // Assuming object2 is the dummy
 }
 
 // Initialize the animation and start the game loop when the page loads
