@@ -5,6 +5,22 @@ document.querySelector("#abandon").addEventListener("click",() => {
 document.querySelector("#start").addEventListener("click",() => {
     const checkboxes = document.querySelectorAll("input[type=checkbox]");
     if(checkboxes[0].checked && checkboxes[1].checked){
+        fetch(`${backendUrl}/api/room/start`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                roomId: localStorage.getItem("roomId"),
+            }),
+        }).then((res) => res.json()).then((data) => {
+            const { status } = data;
+    
+            if (status !== "success") {
+                alert("Failed to start room");
+                return;
+            }
+        });
         window.location.href = window.location.origin + "/frontend/game.html";
     }else{
         alert("Players are not ready");
@@ -45,6 +61,10 @@ function otherPlayerReady() {
     }).then((res) => res.json()).then((data) => {
         const roomId = localStorage.getItem("roomId");
         const players = data.find((room) => room.id === roomId).players;
+
+        if (data.find((room) => room.id === roomId).status) {
+            window.location.href = window.location.origin + "/frontend/game.html";
+        }
 
         if (players.length < 2) {
             return;
