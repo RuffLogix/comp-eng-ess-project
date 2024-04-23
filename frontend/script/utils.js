@@ -9,7 +9,8 @@ class Duck {
         this.turnspeed = 0.05; // Adjusted turning speed for smoother turning
         this.direction = 0;
         this.size = 250;
-        
+
+
         this.level = 1;
         this.MAXEXP = 1000;
         this.distance = 0;
@@ -17,7 +18,7 @@ class Duck {
         this.status = true;
 
         this.maxHp = 100;
-        this.hp=0;
+        this.hp=100;
         this.dmg = 20;
         this.regenHpRate = 5;
 
@@ -26,7 +27,7 @@ class Duck {
         this.dmgLevel=10;
         this.hpLevel=10;
         this.isDragon = false;
-        this.isDead = true;
+        this.isDead = false;
 
         //Hitbox for Ped
         this.radius = this.size;
@@ -198,8 +199,8 @@ function upSkillPoint(type) {
 function generateRandomDots(numDots) {
     for (let i = 0; i < numDots; i++) {
         dots.push({
-            x: Math.random() * 5e4,
-            y: Math.random() * 5e4,
+            x: Math.random()>0.5 ?  Math.random()*5e4 : Math.random()*-5e4 ,
+            y: Math.random()>0.5 ?  Math.random()*5e4 : Math.random()*-5e4,
             imgSrc: "./source/img/bg" + (Math.floor(Math.random()*4)+2) +".PNG",
             size: (Math.random() * 50) +150,
             angle: Math.random() * 360,
@@ -259,151 +260,6 @@ function updateDuckDirection() {
     // console.log(turningDirection,turningSpeed)
 }
 
-
-function setMaxSkillBar(elememt){
-    elememt.children[0].style.setProperty("background-color",`#FD5353`);
-    elememt.children[0].style.width = `100%`;
-    elememt.children[1].style.width = `0%`;
-    elememt.children[0].style.setProperty("border-right-width",`0rem`);
-    let plusButton = elememt.parentElement.children[2];
-    plusButton.style.setProperty("border-width",`0rem`);
-    plusButton.style.setProperty("background-color",`rgba(255, 255, 255, 0)`);
-    plusButton.style.height = `100%`;
-    plusButton.style.width = `100%`;
-    plusButton.textContent = "MAX";
-    plusButton.disabled = true;
-}
-
-
-
-function updateUI() {
-    let level = document.getElementById("level");
-    let distance = document.getElementById("distance");
-    let skillPoint = document.getElementById("skill-point");
-
-    let remainDistance = document.getElementById("remain-distance");
-    let doneDistance = document.getElementById("done-distance");
-    doneDistance.style.width = `${(duck.distance / duck.MAXEXP) * 100}%`;
-    remainDistance.style.width = `${((duck.MAXEXP-duck.distance) / duck.MAXEXP) * 100}%`;
-    level.innerHTML = `Level: ${duck.level}`;
-    distance.innerHTML = `${Math.round(duck.distance, 2)}/${duck.MAXEXP} m`;
-    skillPoint.innerHTML = `Skill Points: ${duck.skillpoint}`;
-
-    let playerHp = document.getElementById("player-hp");
-    playerHp.children[0].style.width = `${(duck.hp / duck.maxHp) * 100}%`;
-    playerHp.children[1].style.width = `${((duck.maxHp-duck.hp) / duck.maxHp) * 100}%`;
-    if (duck.hp>=duck.maxHp){
-        playerHp.children[0].style.setProperty("border-right-width",`0rem`);
-    }
-    else{
-        playerHp.children[0].style.setProperty("border-right-width",`0.17rem`);
-    }
-    let playerHpText = document.getElementById("player-hp-text");
-    playerHpText.textContent = `HP: ${Math.round(duck.hp)}/${duck.maxHp}`;
-
-    let speedBar = document.getElementById("speed-bar");
-    let dmgBar = document.getElementById("Atk-bar");
-    let hpBar = document.getElementById("Hp-bar");
-    if (duck.speedLevel>=duck.MAXLEVEL){
-        setMaxSkillBar(speedBar);
-    }
-    else{
-        speedBar.children[0].style.width = `${(duck.speedLevel / duck.MAXLEVEL) * 100}%`;
-        speedBar.children[1].style.width = `${((duck.MAXLEVEL-duck.speedLevel) / duck.MAXLEVEL) * 100}%`;
-    }
-    if (duck.dmgLevel>=duck.MAXLEVEL){
-        setMaxSkillBar(dmgBar);
-    }
-    else{
-        dmgBar.children[0].style.width = `${(duck.dmgLevel / duck.MAXLEVEL) * 100}%`;
-        dmgBar.children[1].style.width = `${((duck.MAXLEVEL-duck.dmgLevel) / duck.MAXLEVEL) * 100}%`;
-    }
-    if (duck.hpLevel>=duck.MAXLEVEL){
-        setMaxSkillBar(hpBar);
-    }
-    else{
-        hpBar.children[0].style.width = `${(duck.hpLevel / duck.MAXLEVEL) * 100}%`;
-        hpBar.children[1].style.width = `${((duck.MAXLEVEL-duck.hpLevel) / duck.MAXLEVEL) * 100}%`;
-    }
-}
-
-//Preload Duck Image
-const image = new Image();
-const bgImg = new Image();
-const dummyImg = new Image();
-const fireballImg = new Image();
-const bgImgSize = 200;
-
-image.src = "./source/img/ped-top-view.PNG";
-bgImg.src = "./source/img/bg5.PNG";
-fireballImg.src = "./source/img/fireball.PNG";
-dummyImg.src = "./source/img/ped-top-view.PNG"
-
-image.onload = () => {
-    // Start the game loop only after the image is loaded
-    gameLoop();
-};
-function render() {
-    let canvas = document.getElementById("canvas");
-    let ctx = canvas.getContext("2d");
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#FF0000";
-
-    dots.forEach(dot => {
-        ctx.beginPath();
-        ctx.save();
-        // ctx.translate(dummy.x - camera.x + canvas.width / 2, dummy.y - camera.y + canvas.height / 2);
-        // ctx.drawImage(dummyImg, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
-        ctx.translate(-dot.x- camera.x + canvas.width / 2,-dot.y -camera.y + canvas.height / 2);
-        ctx.rotate(dot.angle + Math.PI / 2);
-        ctx.drawImage(dot.img, -dot.x/ 2, -dot.y / 2, dot.size,dot.size);
-        ctx.fillStyle = "#FF0000";
-        ctx.fill();
-        ctx.restore();
-    });
-
-    duck.fireballs.forEach(fireball => {
-        ctx.save(); // Save the current transformation matrix
-        ctx.translate(fireball.x - camera.x + canvas.width / 2, fireball.y - camera.y + canvas.height / 2);
-        ctx.rotate(fireball.initial_direction+ Math.PI / 2); // Rotate by 90 degrees
-        ctx.drawImage(fireballImg, -fireball.radius, -fireball.radius, fireball.radius * 2, fireball.radius * 2);//Rotate fireballImg to sync with duck initial direction
-        ctx.restore(); // Restore the previous transformation matrix
-    });
-
-    // Draw dummy section
-    ctx.strokeStyle = "red"
-    let tmp = 1+(duck.isDragon*0.3);
-    OtherDucks.forEach(otherDuck => {
-        ctx.save(); // Save the current transformation matrix
-        ctx.translate(otherDuck.x - camera.x + canvas.width / 2, otherDuck.y - camera.y + canvas.height / 2);
-        ctx.drawImage(dummyImg, -otherDuck.size / 2 * tmp, -otherDuck.size / 2 *tmp, otherDuck.size * tmp, otherDuck.size * tmp);
-        ctx.restore(); // Restore the previous transformation matrix
-    });
-    // end of dummy seciton
-
-    ctx.save();
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate(duck.direction + Math.PI / 2);
-    ctx.fillStyle = "#96D3FF";
-    ctx.beginPath();
-    if (!duck.isDragon && duck.speedLevel == duck.MAXLEVEL && duck.dmgLevel == duck.MAXLEVEL && duck.hpLevel == duck.MAXLEVEL){
-        image.src = "./source/img/dragon.PNG";
-        duck.isDragon = true;
-    }
-    ctx.arc(0,duck.size*0.075, duck.size*0.4, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
-
-      // Draw rectangle relative to the duck's position
-    
-    // console.log(dummy.x,dummy.y)
-    ctx.restore();
-    updateUI();
-    duck.levelUp();
-
-}
-
 function gameLoop() {
     updateDuckPosition(); // Update duck's position
     updateDuckDirection(); // Update duck's direction
@@ -441,11 +297,16 @@ function removeInactiveFireballs() {
 }
 
 function removeDeadDucks() {
-    for (let i = 0; i < OtherDucks.length; i++) {
-        if (OtherDucks[i].hp <= 0) {
+    for (let i = 0; i < Ducks.length; i++) {
+        if (Ducks[i].hp <= 0) {//TODO online part need to fix this please
             console.log("Duck defeated!");
             // Remove the duck from the array
-            OtherDucks.splice(i, 1);
+            Ducks.splice(i, 1);
+            if(i!=0){
+                OtherDucks.splice(i-1, 1);
+            }else{
+                Ducks[i].isDead = true;
+            }
             // Decrement the loop index to account for the removed duck
             i--;
         }
