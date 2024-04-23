@@ -1,8 +1,9 @@
+import roomModel from "../models/roomModel.mjs";
 import { generateRoomId } from "../services/generateRoom.js";
 
-const rooms = {};
-
 export const getRoom = async (req, res) => {
+    const rooms = await roomModel.find();
+
     res.json(rooms);
 };
 
@@ -10,10 +11,12 @@ export const readyRoom = async (req, res) => {
     const { username, roomId } = req.body;
     let status = "success";
 
-    if (!rooms[roomId]) {
+    const rooms = await roomModel.findOne({ id: roomId });
+
+    if (rooms.length === 0) {
         status = "error";
     } else {
-        rooms[roomId].players = rooms[roomId].players.map((player) => {
+        rooms.players = rooms.players.map((player) => {
             if (player.username === username) {
                 return {
                     ...player,
@@ -23,6 +26,8 @@ export const readyRoom = async (req, res) => {
 
             return player;
         });
+
+        await rooms.save();
     }
 
     res.json({ roomId, status });
@@ -32,9 +37,12 @@ export const createRoom = async (req, res) => {
     const { username } = req.body;
     const roomId = generateRoomId(16);
 
-    rooms[roomId] = {
+    const room = new roomModel({
+        id: roomId,
         players: [{ username, ready: false }],
-    }
+    });
+
+    await room.save();
 
     res.json({
         roomId,
@@ -46,10 +54,13 @@ export const joinRoom = async (req, res) => {
     const { username, roomId } = req.body;
     let status = "success";
 
-    if (!rooms[roomId] || rooms[roomId].players.length >= 2) {
+    const rooms = await roomModel.findOne({ id: roomId });
+
+    if (rooms.length === 0 || rooms.players.length >= 2) {
         status = "error";
     } else {
-        rooms[roomId].players.push({ username, ready: false });
+        rooms.players.push({ username, ready: false });
+        await rooms.save();
     }
 
     res.json({ roomId, status });
@@ -59,14 +70,17 @@ export const leaveRoom = async (req, res) => {
     const { username, roomId } = req.body;
     let status = "success";
 
-    if (!rooms[roomId]) {
+    const rooms = await roomModel.findOne({ id: roomId });
+
+    if (rooms.length === 0) {
         status = "error";
     } else {
-        rooms[roomId].players = rooms[roomId].players.filter((player) => player.username !== username);
+        rooms.players = rooms.players.filter((player) => player.username !== username);
+        await rooms.save();
     }
 
-    if (rooms[roomId].players.length === 0) {
-        delete rooms[roomId];
+    if (rooms.players.length === 0) {
+        await roomModel.deleteOne({ id: roomId });
     }
 
     res.json({ roomId, status });
@@ -74,10 +88,12 @@ export const leaveRoom = async (req, res) => {
 
 export const deleteRoom = async (req, res) => {
     const { roomId } = req.body;
-    delete rooms[roomId];
+    let status = "success";
+    const rooms = await roomModel.deleteOne({ id: roomId });
 
-    res.json({
-        roomId,
-        status: "success",
-    });
+    if (rooms.deletedCount === 0) {
+        status = "error";
+    } 
+
+    res.json({ roomId, status });
 };
