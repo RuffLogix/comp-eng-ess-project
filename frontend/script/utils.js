@@ -181,8 +181,8 @@ class Fireball {
 
     
 
-    hitT(duck){
-        duck.setHp(duck.hp-this.dmg);
+    hitT(x){
+        x.setHp(x.hp-this.dmg);
     }
     
 
@@ -211,8 +211,11 @@ class Camera {
         this.y = duck.y;
     }
 }
+
 var Ducks = [];
+var OtherDucks = Ducks;
 let duck = new Duck().setX(100).setY(100); // Simplified instantiation
+OtherDucks.pop(duck);
 let camera = new Camera();
 let dots = [];
 let dummy = new Duck().setX(50).setY(50); // Simplified Dummy
@@ -424,19 +427,26 @@ function gameLoop() {
     }
     duck.updateFireballs();
 
-    // Check for collision between fireballs and the dummy
-    duck.fireballs.forEach(fireball => {
-        if (checkCollision(fireball, dummy)) {
-            console.log("Fireball hit the dummy!");
-            // Handle hit logic here, for example, decrease dummy's health
-            dummy.setHp(dummy.hp - fireball.dmg);
-        }
-    });
+    checkFireballCollision(); // Check for collision with OtherDucks
+    
     for(let i =0;i<Ducks.size-1;i++){
 
     }
     render(); // Render the game
     requestAnimationFrame(gameLoop); // Request the next frame of the game loop
+}
+
+function checkFireballCollision() {
+    duck.fireballs.forEach(fireball => {
+        OtherDucks.forEach(otherDuck => {
+            if (checkCollision(fireball, otherDuck)) {
+                console.log("Hit");
+                // Handle hit logic here
+                fireball.hitT(otherDuck);
+                console.log(otherDuck.hp);
+            }
+        });
+    });
 }
 
 // Initialize the animation and start the game loop when the page loads
