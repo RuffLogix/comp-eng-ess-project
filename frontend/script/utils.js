@@ -3,7 +3,7 @@ class Duck {
         this.x = 0;
         this.y = 0;
         this.speed = 0; // Start with zero speed
-        this.maxSpeed = 800; // Maximum speed of the duck boat
+        this.maxSpeed = 8000; // Maximum speed of the duck boat
         this.acceleration = 200; // Acceleration of the duck boat
         this.drag = 10; // Drag force to simulate water resistance
         this.turnspeed = 0.05; // Adjusted turning speed for smoother turning
@@ -23,9 +23,9 @@ class Duck {
         this.regenHpRate = 5;
 
         this.MAXLEVEL = 10;
-        this.speedLevel=9;
-        this.dmgLevel=10;
-        this.hpLevel=10;
+        this.speedLevel=1;
+        this.dmgLevel=1;
+        this.hpLevel=1;
         this.isDragon = false;
         this.isDead = false;
 
@@ -87,7 +87,7 @@ class Duck {
         if (this.skillpoint <= 0) return;
         switch (type) {
             case "speed":
-                this.maxSpeed += 100;
+                this.maxSpeed += 250;
                 this.acceleration += 50;
                 this.speedLevel++;
                 break;
@@ -215,13 +215,19 @@ function generateRandomDots(numDots) {
 function updateDuckPosition() {
     let currentTime = performance.now();
     let deltaTime = (currentTime - lastUpdateTime) / 1000; // Convert milliseconds to seconds
-
+    let new_x = duck.x + (duck.speed * Math.cos(duck.direction) * deltaTime);
+    let new_y = duck.y + duck.speed * Math.sin(duck.direction) * deltaTime;
     // Update duck's position based on speed and direction
-    duck.x += duck.speed * Math.cos(duck.direction) * deltaTime;
-    duck.y += duck.speed * Math.sin(duck.direction) * deltaTime;
-
-    // Update distance and apply drag force to slow down the duck boat
-    duck.distance += duck.speed * deltaTime;
+    if(Math.abs(new_x)<=5e4){
+        duck.x = new_x;
+    }
+    if(Math.abs(new_y)<=5e4){
+        duck.y = new_y
+    }
+    if(Math.abs(new_x)<=5e4&Math.abs(new_y)<=5e4){
+        duck.distance += duck.speed * deltaTime; //Update distance 
+    }
+    // Apply drag force to slow down the duck boat
     duck.brake(); // Apply drag force
     duck.regenHp();
 
