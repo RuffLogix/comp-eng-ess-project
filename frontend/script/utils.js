@@ -41,6 +41,10 @@ class Duck {
 
     attack(duck){
         duck.setHp(duck.hp-this.dmg);
+        if(duck.hp < 1){
+            duck.isDead = true;
+        
+        }
     }
 
     // Accelerate the duck boat forward
@@ -267,7 +271,7 @@ function updateDuckDirection() {
     // console.log(turningDirection,turningSpeed)
 }
 
-function DucksCollided(){
+function DucksCollided(){ //TODO Fix multiple collision at one time
     for(let i =0;i<Ducks.length;i++){
         let currentDuck = Ducks[i];
         // console.log(Ducks,currentDuck)
@@ -332,8 +336,6 @@ function removeDeadDucks() {
             Ducks.splice(i, 1);
             if(i!=0){
                 OtherDucks.splice(i-1, 1);
-            }else{
-                Ducks[i].isDead = true;
             }
             // Decrement the loop index to account for the removed duck
             i--;
