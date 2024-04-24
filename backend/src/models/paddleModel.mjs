@@ -1,0 +1,36 @@
+import mongoose from "mongoose";
+
+const paddleSchema = new mongoose.Schema({
+    x: { type: Number, required: true },
+    y: { type: Number, required: true },
+    speed: { type: Number, required: true },
+    maxSpeed: { type: Number, required: true },
+    acceleration: { type: Number, required: true },
+    drag: { type: Number, required: true },
+    turnspeed: { type: Number, required: true },
+    direction: { type: Number, required: true },
+    size: { type: Number, required: true },
+    level: { type: Number, required: true },
+    MAXEXP: { type: Number, required: true },
+    distance: { type: Number, required: true },
+    skillpoint: { type: Number, required: true },
+    status: { type: Boolean, required: true },
+    maxHp: { type: Number, required: true },
+    hp: { type: Number, required: true },
+    dmg: { type: Number, required: true },
+    regenHpRate: { type: Number, required: true },
+    MAXLEVEL: { type: Number, required: true },
+    speedLevel: { type: Number, required: true },
+    dmgLevel: { type: Number, required: true },
+    hpLevel: { type: Number, required: true },
+    isDragon: { type: Boolean, required: true },
+    isDead: { type: Boolean, required: true },
+    Immunity: { type: Boolean, required: true },
+    Immune_time: { type: Number, required: true },
+    radius: { type: Number, required: true },
+    fireballCooldown: { type: Number, required: true },
+    fireballInterval: { type: Number, required: true },
+    fireballs: { type: Array, required: true },
+});
+    
+export default mongoose.model("Paddle", paddleSchema);

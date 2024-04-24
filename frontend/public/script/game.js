@@ -6,24 +6,82 @@ function checkCollision(object1, object2) {
     return distance <= (object1.radius + object2.radius / 2) ** 2; // Assuming object2 is the dummy
 }
 
-var Ducks = [];
-var OtherDucks = Ducks.slice();
+let Ducks = [];
 let duck = new Duck().setX(0).setY(0); // Simplified instantiation
+let dummy = new Duck().setX(100).setY(100);
+let dummy2 = new Duck().setX(100).setY(200);
+let dummy3 = new Duck().setX(200).setY(200);
+Ducks.push(dummy,dummy2,dummy3);
 let camera = new Camera();
 let dots = [];
-let dummy = new Duck().setX(550).setY(550); // Simplified Dummy
-let dummy1 = new Duck().setX(1500).setY(1500); // Simplified Dummy
-let dummy2 = new Duck().setX(5000).setY(500); // Simplified Dummy
-let dummy3 = new Duck().setX(2500).setY(250); // Simplified Dummy
+let playerIndex = 0;
+let moving = false;
 
-var OtherDucks = Ducks.slice();
-OtherDucks.splice(0,1)
+function createDuck() {
+    fetch(`${backendUrl}/api/duck/create`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id: localStorage.getItem("roomId"),
+            duck: duck,
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        if (data.status === "success") {
+            data.players.forEach((player, i) => {
+                if (player.username===localStorage.getItem("username")) {
+                    playerIndex = i;
+                }
+            });
+        } else if (data.status === "load") {
+            data.players.forEach((player, i) => {
+                if (player.username===localStorage.getItem("username")) {
+                    playerIndex = i;
+                }
+            });
+            duck.setParameters(data.duck);
+        }
+    })
+}
+
+function updatePlayerData() {
+    fetch(`${backendUrl}/api/duck`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id: localStorage.getItem("roomId"),
+            duck: duck,
+        }),
+    });
+}
+
+function getDucks() {
+    fetch(`${backendUrl}/api/duck`, {
+        method: "GET",
+    }).then((res) => {
+        return res.json();
+    }).then((data) => {
+        // if (!moving) {
+        //     data.forEach(d => {
+        //         if (d.id === localStorage.getItem("roomId")) {
+        //             duck.setParameters(d.data);
+        //         }
+        //     })
+        // }
+        Ducks = data.filter(duck => duck.id !== localStorage.getItem("roomId"));
+    });
+}
 
 function init() {
     let canvas = document.getElementById("canvas");
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
-    generateRandomDots(5000);
+    generateRandomDots(1000);
 }
 
 function upSkillPoint(type) {
@@ -51,17 +109,11 @@ function updateDuckPosition() {
     let currentTime = performance.now();
     let deltaTime = (currentTime - lastUpdateTime) / 1000; // Convert milliseconds to seconds
     let new_x = duck.x + (duck.speed * Math.cos(duck.direction) * deltaTime);
-    let new_y = duck.y + duck.speed * Math.sin(duck.direction) * deltaTime;
+    let new_y = duck.y + (duck.speed * Math.sin(duck.direction) * deltaTime);
     // Update duck's position based on speed and direction
-    if(Math.abs(new_x)<=5e4){
-        duck.x = new_x;
-    }
-    if(Math.abs(new_y)<=5e4){
-        duck.y = new_y
-    }
-    if(Math.abs(new_x)<=5e4&Math.abs(new_y)<=5e4){
-        duck.distance += duck.speed * deltaTime; //Update distance 
-    }
+    if(Math.abs(new_x)<=5e4) duck.x = new_x;
+    if(Math.abs(new_y)<=5e4) duck.y = new_y
+    if(Math.abs(new_x)<=5e4&&Math.abs(new_y)<=5e4) duck.distance += duck.speed * deltaTime; //Update distance 
     // Apply drag force to slow down the duck boat
     duck.brake(); // Apply drag force
     duck.regenHp();
@@ -102,9 +154,8 @@ function updateDuckDirection() {
 }
 
 function DucksCollided(){ //TODO: Fix multiple collision at one time
-    for(let i =0;i<Ducks.length;i++){
-        let currentDuck = Ducks[i];
-        for(let j=i+1 ; j<Ducks.length;j++){
+        let currentDuck = duck;
+        for(let j=0 ; j<Ducks.length;j++){
             let  nextDuck = Ducks[j];
             if(checkCollision(currentDuck,nextDuck)){
                 console.log("Chon i sus 1111111");
@@ -116,7 +167,6 @@ function DucksCollided(){ //TODO: Fix multiple collision at one time
                         nextDuck.Immunity = true;
                         currentDuck.Immune_time += 5000;
                         nextDuck.Immune_time += 5000;
-                        console.log(currentDuck.Immune_time,nextDuck.Immune_time)
                     }else{
                         if(currentDuck.Immune_time==0){
                             currentDuck.Immunity = false
@@ -124,14 +174,13 @@ function DucksCollided(){ //TODO: Fix multiple collision at one time
                         if(nextDuck.Immune_time==0){
                             nextDuck.Immunity = false;
                         }
-                        currentDuck.Immune_time =Math.max(0,(currentDuck.Immune_time-1/60));
-                        nextDuck.Immune_time = Math.max(0,(nextDuck.Immune_time-1/60));
                     }
                 
             }
-            
+            currentDuck.Immune_time =Math.max(0,(currentDuck.Immune_time-1000/60));
+            nextDuck.Immune_time = Math.max(0,(nextDuck.Immune_time-1000/60));
+            console.log(currentDuck.Immune_time,nextDuck.Immune_time);
         }
-    }
 }
 
 function gameLoop() {
@@ -139,7 +188,6 @@ function gameLoop() {
     updateDuckDirection(); // Update duck's direction
     if(duck.isDragon) duck.fireFireball();
     duck.updateFireballs();
-
     DucksCollided();
     checkFireballCollision(); // Check for collision with Fireballs
     removeDeadDucks();
@@ -178,7 +226,7 @@ function removeDeadDucks() {
 
 function checkFireballCollision() {
     duck.fireballs.forEach((fireball, fireballIndex) => {
-        OtherDucks.forEach(otherDuck => {
+        Ducks.forEach(otherDuck => {
             if (checkCollision(fireball, otherDuck)) {
                 // console.log("Hit");
                 // Handle hit logic here
@@ -190,27 +238,40 @@ function checkFireballCollision() {
     });
 }
 
+setInterval(() => {
+    getDucks();
+    if (playerIndex==0) updatePlayerData(); 
+}, 1000);
+
 // Event listener for keydown events
 addEventListener("keydown", (e) => {
     const { key } = e;
-    if (key=="ArrowLeft" || key=="q" || key=="Q") {
+    if (key==" " || key=="q" || key=="Q") {
         turnDuck(true);
         duck.pedal();
-    } else if (key=="ArrowRight" || key=="e" || key=="E") {
+    } else if (key=="Enter" || key=="e" || key=="E") {
         turnDuck(false);
         duck.pedal();
     } else if (key=="ArrowDown" || key=="s" || key=="S") {
         duck.brake();
     }
+
+    // if (key === "Space" || key === " ") {
+    //     turnDuck(playerIndex==0);
+    //     duck.pedal();
+    // }
 });
 
 // Event listener for keyup events
 addEventListener("keyup", (e) => {
     // Reset turning flag when turning keys are released
-    if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "q" || e.key === "Q" || e.key === "e" || e.key === "E") {
-        isTurning = false;
-    }
+    isTurning = false;
 });
 
-addEventListener("load", init());
+addEventListener("load", () => {
+    init();
+    createDuck();
+    getDucks();
+});
+
 addEventListener("resize", init());

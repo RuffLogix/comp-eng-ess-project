@@ -2,7 +2,7 @@ class Fireball {
     constructor(x, y, direction) {
         this.x = x;
         this.y = y;
-        this.speed = 10 + duck.speed/100;
+        this.speed = 10 + duck.speed/50;
         this.radius = 70;
         this.direction = direction;
         this.initial_direction = direction;

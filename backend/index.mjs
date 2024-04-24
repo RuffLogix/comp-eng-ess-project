@@ -15,6 +15,6 @@ app.use(cors());
 app.use("/api/duck", duckRoute);
 app.use("/api/room", roomRoute);
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+app.listen(3222, () => {
+    console.log("Server is running on port 3222");
 });

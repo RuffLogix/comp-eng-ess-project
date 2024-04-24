@@ -41,7 +41,7 @@ document.querySelector("#createPed").addEventListener("click",() => {
             localStorage.setItem("roomId", roomId);
             localStorage.setItem("username", username);
 
-            window.location.href = window.location.origin + "/frontend/custom.html";
+            window.location.href = window.location.origin + "/custom.html";
         });
     }
 });
@@ -72,7 +72,7 @@ document.querySelector("#join").addEventListener("click",() => {
             localStorage.setItem("roomId", roomId);
             localStorage.setItem("username", username);
 
-            window.location.href = window.location.origin + "/frontend/custom.html";
+            window.location.href = window.location.origin + "/custom.html";
         });
     }
 });

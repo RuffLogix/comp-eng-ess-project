@@ -1,4 +1,37 @@
 class Duck {
+    setParameters(data) {
+        this.x = data.x;
+        this.y = data.y;
+        this.speed = data.speed;
+        this.maxSpeed = data.maxSpeed;
+        this.acceleration = data.acceleration;
+        this.drag = data.drag;
+        this.turnspeed = data.turnspeed;
+        this.direction = data.direction;
+        this.size = data.size;
+        this.level = data.level;
+        this.MAXEXP = data.MAXEXP;
+        this.distance = data.distance;
+        this.skillpoint = data.skillpoint;
+        this.status = data.status;
+        this.maxHp = data.maxHp;
+        this.hp = data.hp;
+        this.dmg = data.dmg;
+        this.regenHpRate = data.regenHpRate;
+        this.MAXLEVEL = data.MAXLEVEL;
+        this.speedLevel = data.speedLevel;
+        this.dmgLevel = data.dmgLevel;
+        this.hpLevel = data.hpLevel;
+        this.isDragon = data.isDragon;
+        this.isDead = data.isDead;
+        this.Immunity = data.Immunity;
+        this.Immune_time = data.Immune_time;
+        this.radius = data.radius;
+        this.fireballCooldown = data.fireballCooldown;
+        this.fireballInterval = data.fireballInterval;
+        this.fireballs = data.fireballs;
+    }
+
     constructor() {
         this.x = 0;
         this.y = 0;
@@ -36,7 +69,6 @@ class Duck {
         this.fireballCooldown = 0;
         this.fireballInterval = 1000; // Fireball cooldown in milliseconds
         this.fireballs = []; // Array to store fireball instances
-        Ducks.push(this);// Add to Objects array
     }
 
     attack(duck){
@@ -124,7 +156,10 @@ class Duck {
     updateFireballs() {
         // Update each fireball's position
         this.fireballs.forEach(fireball => {
-            fireball.update();
+            if(fireball instanceof Fireball){
+                fireball.update();
+            }
+            
         });
         // Decrease the cooldown
         this.fireballCooldown -= 5;

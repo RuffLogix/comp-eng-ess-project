@@ -78,12 +78,15 @@ const image = new Image();
 const bgImg = new Image();
 const dummyImg = new Image();
 const fireballImg = new Image();
+const dragonImg = new Image();
 const bgImgSize = 200;
 const tableSize = 1e5;
 image.src = "./source/img/ped-top-view.PNG";
 bgImg.src = "./source/img/bg5.PNG";
-fireballImg.src = "./source/img/fireball.PNG";
+fireballImg.src = "./source/img/fireBall.PNG";
 dummyImg.src = "./source/img/ped-top-view.PNG"
+dragonImg.src= "./source/img/dragon.PNG"
+
 
 image.onload = () => {
     // Start the game loop only after the image is loaded
@@ -94,17 +97,6 @@ function render() {
     let ctx = canvas.getContext("2d");
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    if (!duck.isDead){
-        ctx.save();
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate(duck.direction + Math.PI / 2);
-        ctx.fillStyle = "#96D3FF";
-        ctx.beginPath();
-        ctx.arc(0,duck.size*0.075, duck.size*0.4, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.restore();
-    }
 
     dots.forEach(dot => {
         ctx.beginPath();
@@ -127,28 +119,41 @@ function render() {
         ctx.restore(); // Restore the previous transformation matrix
     });
 
-    // Draw dummy section
-    ctx.strokeStyle = "red"
     let tmp = 1+(duck.isDragon*0.3);
-    OtherDucks.forEach(otherDuck => {
-        ctx.save(); // Save the current transformation matrix
-        ctx.translate(otherDuck.x - camera.x + canvas.width / 2, otherDuck.y - camera.y + canvas.height / 2);
-        ctx.drawImage(dummyImg, -otherDuck.size / 2 * tmp, -otherDuck.size / 2 *tmp, otherDuck.size * tmp, otherDuck.size * tmp);
-        ctx.restore(); // Restore the previous transformation matrix
-    });
-    // end of dummy seciton
     if (!duck.isDead){
         ctx.save();
         ctx.translate(canvas.width / 2, canvas.height / 2);
         ctx.rotate(duck.direction + Math.PI / 2);
         ctx.beginPath();
         if (!duck.isDragon && duck.speedLevel == duck.MAXLEVEL && duck.dmgLevel == duck.MAXLEVEL && duck.hpLevel == duck.MAXLEVEL){
-            image.src = "./source/img/dragon.PNG";
+            console.log("im going to dragon");
             duck.isDragon = true;
         }
-        ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+        if (duck.isDragon){
+            ctx.drawImage(dragonImg, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+        }else{
+            ctx.drawImage(image, -duck.size / 2 * tmp, -duck.size / 2 *tmp, duck.size * tmp, duck.size * tmp);
+            // image.src = "./source/img/ped-top-view.PNG";
+        }
+
         ctx.restore();
     }
+
+    Ducks.forEach(educk => {
+        if (!educk.isDead) {
+            ctx.save();
+            ctx.translate(educk.x - camera.x + canvas.width / 2, educk.y - camera.y + canvas.height / 2);
+            ctx.rotate(educk.direction + Math.PI / 2);
+            ctx.beginPath();
+            if (educk.isDragon){
+                ctx.drawImage(dragonImg, -educk.size / 2 * tmp, -educk.size / 2 *tmp, educk.size * tmp, educk.size * tmp);
+            }else{
+                ctx.drawImage(image, -educk.size / 2 * tmp, -educk.size / 2 *tmp, educk.size * tmp, educk.size * tmp);
+            }
+        
+            ctx.restore();
+        }
+    })
 
     ctx.beginPath();
     ctx.save();
@@ -157,7 +162,6 @@ function render() {
     ctx.rect(-(tableSize/4),-(tableSize/4),(tableSize),(tableSize));
     ctx.stroke();
     ctx.restore();
-    // console.log(duck.x+' '+duck.y);
     updateUI();
     duck.levelUp();
 
@@ -177,7 +181,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     
     document.getElementById("gameover-popup").addEventListener("click", () => {
-        window.location.href = window.location.origin + "/frontend/index.html";
+        window.location.href = window.location.origin + "/index.html";
     });
 })
 
+function getScoreBoard() {
+    fetch(`${backendUrl}/api/duck/scoreboard`, {
+        method: "GET",
+    }).then((res) => {
+        return res.json();
+    }).then((data) => {
+        console.log(data);
+        let scoreBoard = document.getElementById("scoreboard");
+        scoreBoard.innerHTML = "";
+        data.forEach((score, index) => {
+            if (score.players.length < 2) return;
+            let scoreElement = document.createElement("li");
+            scoreElement.innerHTML = `${score.players[0].username} <br> ${score.players[1].username}`;
+            scoreBoard.appendChild(scoreElement);
+        });
+    });
+}
+
+setInterval(getScoreBoard, 1000);

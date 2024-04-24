@@ -1,5 +1,5 @@
 document.querySelector("#abandon").addEventListener("click",() => {
-    window.location.href = window.location.origin + "/frontend/index.html";
+    window.location.href = window.location.origin + "/index.html";
 })
 
 document.querySelector("#start").addEventListener("click",() => {
@@ -21,7 +21,7 @@ document.querySelector("#start").addEventListener("click",() => {
                 return;
             }
         });
-        window.location.href = window.location.origin + "/frontend/game.html";
+        window.location.href = window.location.origin + "/game.html";
     }else{
         alert("Players are not ready");
     }
@@ -63,7 +63,7 @@ function otherPlayerReady() {
         const players = data.find((room) => room.id === roomId).players;
 
         if (data.find((room) => room.id === roomId).status) {
-            window.location.href = window.location.origin + "/frontend/game.html";
+            window.location.href = window.location.origin + "/game.html";
         }
 
         if (players.length < 2) {
@@ -96,13 +96,13 @@ document.getElementById("abandon-ped").addEventListener("click", () => {
             return;
         }
 
-        window.location.href = window.location.origin + "/frontend/index.html";
+        window.location.href = window.location.origin + "/index.html";
     });
 })
 
 addEventListener("load", () => {
     if (localStorage.getItem("roomId") == null || localStorage.getItem("username") == null) {
-        window.location.href = window.location.origin + "/frontend/index.html";
+        window.location.href = window.location.origin + "/index.html";
     }
 
     document.querySelector("#text-roomId").innerHTML = localStorage.getItem("roomId");
